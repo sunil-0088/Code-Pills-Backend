@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Code_Pills.DataAccess.Context
 {
-    public class CodePillsContext: DbContext
+    public class ApplicationDbContext: DbContext
     {
-        public CodePillsContext(DbContextOptions<CodePillsContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<PersonalInfo> PersonalInformation { get; set; }
         public DbSet<Contest> Contests { get; set; }
         public DbSet<Question> Questions { get; set; }

@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CodePillsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
 // registering authDbContext for identity
 builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
 
@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     }
     );
-builder.Services.AddScoped<IJwtToken,JwtTokenService>();
+builder.Services.AddScoped<IJwtToken, JwtTokenService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
