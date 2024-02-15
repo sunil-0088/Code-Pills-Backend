@@ -11,10 +11,10 @@ namespace Code_Pills.DataAccess.EntityModels
     {
         [Key] 
         public int Id { get; set; }
-        public string ContestId { get; set; }
-        public string UserId { get; set; }
-        public string Status { get; set; }
-        public string TimeTaken { get; set; }
+        public required string Status { get; set; }
+        public string? TimeTaken { get; set; }
+        public virtual Contest Contest { get; set; }
+        public virtual PersonalInfo PersonalInfo { get; set; }
 
     }
 }

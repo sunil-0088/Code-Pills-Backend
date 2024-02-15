@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Code_Pills.DataAccess.EntityModels
 {
-    public class CategoryTag
+    public class ContestQuestionMapping
     {
         [Key]
-        public int Id { get; set; }
-        public string TagName { get; set; }
+        public Guid Id { get; set; }
+        public virtual Question Question { get; set; }
+        public virtual Contest Contest { get; set; }
     }
 }

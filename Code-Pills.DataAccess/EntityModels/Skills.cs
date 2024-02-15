@@ -11,6 +11,6 @@ namespace Code_Pills.DataAccess.EntityModels
     {
         [Key]
         public int Id { get; set; }
-        public string SkilllName { get; set; }
+        public required string SkilllName { get; set; }
     }
 }

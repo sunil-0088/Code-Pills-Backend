@@ -12,5 +12,9 @@ namespace Code_Pills.DataAccess.Context
     {
         public CodePillsContext(DbContextOptions<CodePillsContext> options) : base(options) { }
         public DbSet<PersonalInfo> PersonalInformation { get; set; }
+        public DbSet<Contest> Contests { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Skills> Skills { get; set; }
+        public DbSet<Tag> Tags { get; set; }
     }
 }
