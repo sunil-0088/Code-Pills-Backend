@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Code_Pills.DataAccess.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20240215111326_Initial")]
+    [Migration("20240215112318_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -162,15 +162,15 @@ namespace Code_Pills.DataAccess.Migrations
                         {
                             Id = "0d88f3e7-d8ad-40eb-8c9b-85e45e83bdb0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "88223e3f-4fc4-489b-8426-6405f1a703ed",
+                            ConcurrencyStamp = "20649eab-eaa1-4805-bc5f-9fa145226f42",
                             Email = "admin@codepills.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CODEPILLS.COM",
                             NormalizedUserName = "ADMIN@CODEPILLS.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMvUc99NlupLxfjvRcUi3+5znxu+EFB9HLuQVK3qSculjdVjB65mU2fs5yQuzFx0Lw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKc71lCtOEnQj+mMeT0M3FMDO8eNwSLHlOXlj9bZGjT2sTgdQUD4Vb7sZ4bCDqCrmA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "918b5233-4705-4ae8-b473-2632c6e5b212",
+                            SecurityStamp = "3afc33ce-da40-498c-aba1-cd10b176b2ec",
                             TwoFactorEnabled = false,
                             UserName = "admin@codepills.com"
                         });

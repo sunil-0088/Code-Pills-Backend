@@ -170,7 +170,7 @@ namespace Code_Pills.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "0d88f3e7-d8ad-40eb-8c9b-85e45e83bdb0", 0, "88223e3f-4fc4-489b-8426-6405f1a703ed", "admin@codepills.com", false, false, null, "ADMIN@CODEPILLS.COM", "ADMIN@CODEPILLS.COM", "AQAAAAIAAYagAAAAEMvUc99NlupLxfjvRcUi3+5znxu+EFB9HLuQVK3qSculjdVjB65mU2fs5yQuzFx0Lw==", null, false, "918b5233-4705-4ae8-b473-2632c6e5b212", false, "admin@codepills.com" });
+                values: new object[] { "0d88f3e7-d8ad-40eb-8c9b-85e45e83bdb0", 0, "20649eab-eaa1-4805-bc5f-9fa145226f42", "admin@codepills.com", false, false, null, "ADMIN@CODEPILLS.COM", "ADMIN@CODEPILLS.COM", "AQAAAAIAAYagAAAAEKc71lCtOEnQj+mMeT0M3FMDO8eNwSLHlOXlj9bZGjT2sTgdQUD4Vb7sZ4bCDqCrmA==", null, false, "3afc33ce-da40-498c-aba1-cd10b176b2ec", false, "admin@codepills.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
