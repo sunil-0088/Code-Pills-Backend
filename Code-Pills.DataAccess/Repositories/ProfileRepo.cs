@@ -36,12 +36,25 @@ namespace Code_Pills.DataAccess.Repositories
         {
             try
             {
-                PersonalInfo? user = await _dbContext.PersonalInformation.FirstOrDefaultAsync(u => u.Id == performance.PersonalInfoId);
-                user.PerformanceMapping = performance;
+                await _dbContext.PerformanceMappings.AddAsync(performance);
                 await _dbContext.SaveChangesAsync();
                 return "Performance Saved Successfully";
             }
             catch (Exception Ex)
+            {
+                return "";
+            }
+        }
+        public async Task<string> EditPerformance(PerformanceMapping performance)
+        {
+            try
+            {
+                PerformanceMapping previousPerformance = await _dbContext.PerformanceMappings.FirstOrDefaultAsync(user => user.PersonalInfoId == performance.PersonalInfoId);
+                previousPerformance = performance;
+                await _dbContext.SaveChangesAsync();
+                return "Performance Edited Succesfully";
+            }
+            catch(Exception Ex)
             {
                 return "";
             }

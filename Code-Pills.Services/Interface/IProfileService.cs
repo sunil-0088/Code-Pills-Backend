@@ -11,5 +11,6 @@ namespace Code_Pills.Services.Interface
     {
         Task<string> SaveProfile(ProfileDTO profile);
         Task<string> SavePerformance(PerformanceDTO performance);
+        Task<string> EditPerformance(PerformanceDTO performance);
     }
 }

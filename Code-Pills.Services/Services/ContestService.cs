@@ -37,5 +37,17 @@ namespace Code_Pills.Services.Services
             Contest contestResult = _mapper.Map<Contest>(results);
             return await _contestRepo.SaveContestResult(contestResult);
         }
+        public async Task<IEnumerable<ContestDTO>> GetContest()
+        {
+            IEnumerable<Contest> activeContest = await _contestRepo.GetContest();
+            IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(activeContest);
+            return contests;
+        }
+        public async Task<IEnumerable<ContestDTO>> GetRegisteredContest(string Id)
+        {
+            IEnumerable<Contest> registeredContest = await _contestRepo.GetRegisteredContest(Id);
+            IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(registeredContest);
+            return contests;
+        }
     }
 }

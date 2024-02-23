@@ -32,5 +32,10 @@ namespace Code_Pills.Services.Services
             PerformanceMapping userPerformance = _mapper.Map<PerformanceMapping>(performance);
             return await _profileRepo.SavePerformance(userPerformance);
         }
+        public async Task<string> EditPerformance(PerformanceDTO performance)
+        {
+            PerformanceMapping userPerformance = _mapper.Map<PerformanceMapping>(performance);
+            return await _profileRepo.EditPerformance(userPerformance);
+        }
     }
 }

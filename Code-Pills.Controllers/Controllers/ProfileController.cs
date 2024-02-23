@@ -24,10 +24,10 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _profileService.SavePerformance(performance));
         }
-       /* [HttpPut("UserPerformance")]
+        [HttpPut("UserPerformance")]
         public async Task<IActionResult> EditPerformance(PerformanceDTO performance)
         {
-
-        }*/
+            return Ok(await _profileService.EditPerformance(performance));
+        }
     }
 }

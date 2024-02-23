@@ -40,7 +40,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     About = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Profession = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -99,27 +99,26 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContestUserMapping",
+                name: "ContestUserMappings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeTaken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PersonalInfoId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PersonalInfoId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ContestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContestUserMapping", x => x.Id);
+                    table.PrimaryKey("PK_ContestUserMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContestUserMapping_Contests_ContestId",
+                        name: "FK_ContestUserMappings_Contests_ContestId",
                         column: x => x.ContestId,
                         principalTable: "Contests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ContestUserMapping_PersonalInformation_PersonalInfoId",
+                        name: "FK_ContestUserMappings_PersonalInformation_PersonalInfoId",
                         column: x => x.PersonalInfoId,
                         principalTable: "PersonalInformation",
                         principalColumn: "Id",
@@ -127,7 +126,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "PerformanceMapping",
+                name: "PerformanceMappings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -140,9 +139,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PerformanceMapping", x => x.Id);
+                    table.PrimaryKey("PK_PerformanceMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PerformanceMapping_PersonalInformation_PersonalInfoId",
+                        name: "FK_PerformanceMappings_PersonalInformation_PersonalInfoId",
                         column: x => x.PersonalInfoId,
                         principalTable: "PersonalInformation",
                         principalColumn: "Id",
@@ -150,24 +149,24 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContestQuestionMapping",
+                name: "ContestQuestionMappings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ContestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ContestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContestQuestionMapping", x => x.Id);
+                    table.PrimaryKey("PK_ContestQuestionMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContestQuestionMapping_Contests_ContestId",
+                        name: "FK_ContestQuestionMappings_Contests_ContestId",
                         column: x => x.ContestId,
                         principalTable: "Contests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ContestQuestionMapping_Questions_QuestionId",
+                        name: "FK_ContestQuestionMappings_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
@@ -175,26 +174,26 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserQuestionMapping",
+                name: "UserQuestionMappings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsSolved = table.Column<bool>(type: "bit", nullable: false),
                     Solution = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PersonalInfoId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PersonalInfoId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserQuestionMapping", x => x.Id);
+                    table.PrimaryKey("PK_UserQuestionMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserQuestionMapping_PersonalInformation_PersonalInfoId",
+                        name: "FK_UserQuestionMappings_PersonalInformation_PersonalInfoId",
                         column: x => x.PersonalInfoId,
                         principalTable: "PersonalInformation",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserQuestionMapping_Questions_QuestionId",
+                        name: "FK_UserQuestionMappings_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
@@ -202,25 +201,24 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionTagMapping",
+                name: "QuestionTagMappings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TagId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionTagMapping", x => x.Id);
+                    table.PrimaryKey("PK_QuestionTagMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuestionTagMapping_Questions_QuestionId",
+                        name: "FK_QuestionTagMappings_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuestionTagMapping_Tags_TagId",
+                        name: "FK_QuestionTagMappings_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
                         principalColumn: "Id",
@@ -228,49 +226,49 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContestQuestionMapping_ContestId",
-                table: "ContestQuestionMapping",
+                name: "IX_ContestQuestionMappings_ContestId",
+                table: "ContestQuestionMappings",
                 column: "ContestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContestQuestionMapping_QuestionId",
-                table: "ContestQuestionMapping",
+                name: "IX_ContestQuestionMappings_QuestionId",
+                table: "ContestQuestionMappings",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContestUserMapping_ContestId",
-                table: "ContestUserMapping",
+                name: "IX_ContestUserMappings_ContestId",
+                table: "ContestUserMappings",
                 column: "ContestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContestUserMapping_PersonalInfoId",
-                table: "ContestUserMapping",
+                name: "IX_ContestUserMappings_PersonalInfoId",
+                table: "ContestUserMappings",
                 column: "PersonalInfoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PerformanceMapping_PersonalInfoId",
-                table: "PerformanceMapping",
+                name: "IX_PerformanceMappings_PersonalInfoId",
+                table: "PerformanceMappings",
                 column: "PersonalInfoId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionTagMapping_QuestionId",
-                table: "QuestionTagMapping",
+                name: "IX_QuestionTagMappings_QuestionId",
+                table: "QuestionTagMappings",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionTagMapping_TagId",
-                table: "QuestionTagMapping",
+                name: "IX_QuestionTagMappings_TagId",
+                table: "QuestionTagMappings",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserQuestionMapping_PersonalInfoId",
-                table: "UserQuestionMapping",
+                name: "IX_UserQuestionMappings_PersonalInfoId",
+                table: "UserQuestionMappings",
                 column: "PersonalInfoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserQuestionMapping_QuestionId",
-                table: "UserQuestionMapping",
+                name: "IX_UserQuestionMappings_QuestionId",
+                table: "UserQuestionMappings",
                 column: "QuestionId");
         }
 
@@ -278,22 +276,22 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ContestQuestionMapping");
+                name: "ContestQuestionMappings");
 
             migrationBuilder.DropTable(
-                name: "ContestUserMapping");
+                name: "ContestUserMappings");
 
             migrationBuilder.DropTable(
-                name: "PerformanceMapping");
+                name: "PerformanceMappings");
 
             migrationBuilder.DropTable(
-                name: "QuestionTagMapping");
+                name: "QuestionTagMappings");
 
             migrationBuilder.DropTable(
                 name: "Skills");
 
             migrationBuilder.DropTable(
-                name: "UserQuestionMapping");
+                name: "UserQuestionMappings");
 
             migrationBuilder.DropTable(
                 name: "Contests");

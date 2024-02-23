@@ -11,5 +11,6 @@ namespace Code_Pills.DataAccess.Interface
     {
         Task<string> SaveProfile(PersonalInfo profile);
         Task<string> SavePerformance(PerformanceMapping performance);
+        Task<string> EditPerformance(PerformanceMapping performance);
     }
 }

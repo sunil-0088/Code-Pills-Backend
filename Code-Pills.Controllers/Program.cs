@@ -13,11 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IContestService, ContestService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IProblemService, ProblemService>();
 builder.Services.AddScoped<IContestRepo, ContestRepo>();
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 builder.Services.AddScoped<IHomeRepo, HomeRepo>();
-builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+builder.Services.AddScoped<IProblemRepo, ProblemRepo>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Code_Pills.Services.Mapper.MappingProfile));

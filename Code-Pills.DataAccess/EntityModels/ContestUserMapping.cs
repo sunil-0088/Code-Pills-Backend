@@ -11,8 +11,8 @@ namespace Code_Pills.DataAccess.EntityModels
     public class ContestUserMapping
     {
         [Key] 
-        public int Id { get; set; }
-        public required string Status { get; set; }
+        public Guid Id { get; set; }
+        public string? Status { get; set; }
         public string? TimeTaken { get; set; }
         [ForeignKey("PersonalInfo")]
         public string PersonalInfoId { get; set; }

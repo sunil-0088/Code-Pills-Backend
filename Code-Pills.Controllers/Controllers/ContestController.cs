@@ -29,15 +29,21 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _contestSerivce.SaveContestResult(results));
         }
-     /*   [HttpPut("UserResult")]
-        public async Task<IActionResult> SaveUserResult(ContestApplicantDTO applicant)
-        {
-        }
+        /*        [HttpPut("UserResult")]
+                public async Task<IActionResult> SaveUserResult(ContestApplicantDTO applicant)
+                {
+                    return Ok(_contestSerivce.SaveUserResults(applicant));
+                }*/
         [HttpGet("Contest")]
         public async Task<IActionResult> GetContest()
         {
-
-        }*/
+            return Ok(await _contestSerivce.GetContest());
+        }
+        [HttpGet("RegisteredContest")]
+        public async Task<IActionResult> GetRegisteredContest(string userId)
+        {
+            return Ok(await _contestSerivce.GetRegisteredContest(userId));
+        }
 
     }
 }

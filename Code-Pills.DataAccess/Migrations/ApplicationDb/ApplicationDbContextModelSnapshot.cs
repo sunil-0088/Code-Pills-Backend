@@ -90,16 +90,14 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("ContestQuestionMapping");
+                    b.ToTable("ContestQuestionMappings");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.ContestUserMapping", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ContestId")
                         .HasColumnType("uniqueidentifier");
@@ -109,7 +107,6 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TimeTaken")
@@ -121,7 +118,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
                     b.HasIndex("PersonalInfoId");
 
-                    b.ToTable("ContestUserMapping");
+                    b.ToTable("ContestUserMappings");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.PerformanceMapping", b =>
@@ -159,7 +156,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.HasIndex("PersonalInfoId")
                         .IsUnique();
 
-                    b.ToTable("PerformanceMapping");
+                    b.ToTable("PerformanceMappings");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.PersonalInfo", b =>
@@ -189,7 +186,6 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -234,11 +230,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.QuestionTagMapping", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -252,7 +246,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("QuestionTagMapping");
+                    b.ToTable("QuestionTagMappings");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Skills", b =>
@@ -318,7 +312,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("UserQuestionMapping");
+                    b.ToTable("UserQuestionMappings");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.ContestQuestionMapping", b =>

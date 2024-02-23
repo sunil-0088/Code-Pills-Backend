@@ -36,8 +36,7 @@ namespace Code_Pills.DataAccess.Repositories
         {
             try
             { 
-                PersonalInfo? user = await _dbContext.PersonalInformation.FirstOrDefaultAsync(u => u.Id == applicant.PersonalInfo.Id);
-                user.ContestUserMapping.Add(applicant);
+                await _dbContext.ContestUserMappings.AddAsync(applicant);
                 await _dbContext.SaveChangesAsync();
                 return "Participation Saved Successfully";
             }
@@ -60,6 +59,38 @@ namespace Code_Pills.DataAccess.Repositories
             catch (Exception ex)
             {
                 return "";
+            }
+        }
+        public async Task<IEnumerable<Contest>> GetContest()
+        {
+            IEnumerable<Contest> activeContest = await _dbContext.Contests
+                .Where(contest => contest.StartTime > DateTime.Now).ToListAsync();
+            return activeContest;
+        }
+        public async Task<IEnumerable<Contest>> GetRegisteredContest(string Id)
+        {
+            IEnumerable<Guid> registeredContestIds = await _dbContext.ContestUserMappings
+                .Where(applicants => applicants.PersonalInfoId == Id).Select(application => application.ContestId).ToListAsync();
+
+            IEnumerable<Contest>? registeredContests = null;
+            if(registeredContestIds == null)
+            {
+                return registeredContests;
+            }
+            try
+            {
+                List<Contest> contestList = new List<Contest>();
+                foreach (Guid id in registeredContestIds)
+                {
+                    contestList.Add(await _dbContext.Contests.Where(contest => contest.Id == id).FirstOrDefaultAsync());
+                }
+                registeredContests = contestList;
+                return registeredContests;
+            }
+            catch(Exception ex)
+            {
+                return registeredContests;
+
             }
         }
     }

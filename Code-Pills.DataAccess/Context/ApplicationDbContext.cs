@@ -16,5 +16,10 @@ namespace Code_Pills.DataAccess.Context
         public DbSet<Question> Questions { get; set; }
         public DbSet<Skills> Skills { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<ContestUserMapping> ContestUserMappings { get; set; }
+        public DbSet<PerformanceMapping> PerformanceMappings { get; set; }
+        public DbSet<ContestQuestionMapping> ContestQuestionMappings { get; set; }
+        public DbSet<QuestionTagMapping> QuestionTagMappings { get; set; }
+        public DbSet<UserQuestionMapping> UserQuestionMappings { get; set; }
     }
 }

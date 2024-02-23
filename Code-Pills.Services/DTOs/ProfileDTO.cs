@@ -8,6 +8,7 @@ namespace Code_Pills.Services.DTOs
 {
     public class ProfileDTO
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Skills { get; set; }
