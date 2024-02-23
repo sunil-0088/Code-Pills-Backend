@@ -1,4 +1,5 @@
 using Code_Pills.DataAccess.Context;
+using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.Interface;
 using Code_Pills.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,11 +17,9 @@ builder.Services.AddDbContext<CodePillsContext>(options => options.UseSqlServer(
 // registering authDbContext for identity
 builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
 
-builder.Services.AddIdentityCore<IdentityUser>()
-    .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("CodePills")
-    .AddEntityFrameworkStores<AuthDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<AuthDbContext>();
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
@@ -30,7 +29,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 5;
     options.Password.RequiredUniqueChars = 1;
 });
-
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(10));
 // registering jwt 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -47,7 +46,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     }
     );
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
 builder.Services.AddScoped<IJwtToken,JwtTokenService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,8 +69,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 

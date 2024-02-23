@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Code_Pills.DataAccess.Context
 {
-    public class AuthDbContext:IdentityDbContext
+    public class AuthDbContext:IdentityDbContext<IdentityUser>
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options): base(options)
         {

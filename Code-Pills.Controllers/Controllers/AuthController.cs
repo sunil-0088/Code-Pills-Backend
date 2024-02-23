@@ -1,8 +1,13 @@
-﻿using Code_Pills.Services.DTOs;
+﻿using Azure.Core;
+using Code_Pills.DataAccess.Models;
+using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
+using Code_Pills.Services.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Net;
 
 namespace Code_Pills.Controllers.Controllers
 {
@@ -12,52 +17,64 @@ namespace Code_Pills.Controllers.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly IJwtToken tokenService;
+        private readonly IEmailService _emailService;
+        private readonly IUserService _userService;
 
-        public AuthController( UserManager<IdentityUser> userManager, IJwtToken tokenService)
+        public AuthController( UserManager<IdentityUser> userManager, IJwtToken tokenService, IEmailService emailService, IUserService userService)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
+            _emailService = emailService;
+            _userService = userService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
-            // Create Identity user
-            var user = new IdentityUser
-            {
-                UserName = request.Email?.Trim(),
-                Email = request.Email?.Trim(),
-            };
-            var identityResult = await userManager.CreateAsync(user, request.Password);
-            if(identityResult.Succeeded)
-            {
-                identityResult = await userManager.AddToRoleAsync(user, "User");
-                if(identityResult.Succeeded)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    if(identityResult.Errors.Any())
+                    // Create Identity user
+                    var user = new IdentityUser
                     {
-                        foreach(var error in identityResult.Errors)
+                        UserName = request.Email?.Trim(),
+                        Email = request.Email?.Trim(),
+                    };
+                    var identityResult = await userManager.CreateAsync(user, request.Password);
+                    if (identityResult.Succeeded)
+                    {
+                        identityResult = await userManager.AddToRoleAsync(user, "User");
+                        if (identityResult.Succeeded)
                         {
-                            ModelState.AddModelError("", error.Description);
+                            // Generating Verificatiom token
+
+                            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var verificationLink = $"https://localhost:7010/api/Auth/verify?userId={user.Id}&token={token}";
+                            var emailBody = $"Please click the following link to verify your email address:{verificationLink}";
+                            // Send verification email
+                            await _emailService.SendEmailAsync(request.Email, "Email Verification", emailBody);
+                            return Ok(new { message = "Registration successful. Please check your email for verification instructions." });
+                        }
+                        else
+                        {
+                            if (identityResult.Errors.Any())
+                            {
+                                foreach (var error in identityResult.Errors)
+                                {
+                                    ModelState.AddModelError("", error.Description);
+                                }
+                            }
                         }
                     }
-                }
-            }
-            else
-            {
-                if (identityResult.Errors.Any())
-                {
-                    foreach(var error in identityResult.Errors)
+                    else
                     {
-                        ModelState.AddModelError("", error.Description);
+                        if (identityResult.Errors.Any())
+                        {
+                            foreach (var error in identityResult.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                        }
                     }
+                    return ValidationProblem(ModelState);
+
                 }
-            }
-            return ValidationProblem(ModelState);
-        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
@@ -65,7 +82,7 @@ namespace Code_Pills.Controllers.Controllers
             // checking email
             var identityUser = await userManager.FindByEmailAsync(request.Email);
 
-            if(identityUser != null)
+            if(identityUser != null && identityUser.EmailConfirmed)
             {
                 var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser,request.Password);
                 if(checkPasswordResult)
@@ -125,7 +142,8 @@ namespace Code_Pills.Controllers.Controllers
                     identityResult = await userManager.AddToRoleAsync(user, "User");
                     if (identityResult.Succeeded)
                     {
-                        return Ok();
+                        var isMarked = await this._userService.MarkEmailConfirm(user);
+                        return Ok(isMarked);
                     }
                     else
                     {
@@ -151,5 +169,74 @@ namespace Code_Pills.Controllers.Controllers
                 return ValidationProblem(ModelState);
             }
         }
+
+        // email verification 
+
+        [HttpGet("verify")]
+        public async Task<IActionResult> VerifyEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("Invalid verification token.");
+            }
+
+            var isVerified= await _userService.VerifyEmailAsync(userId,token);
+
+            if (isVerified)
+            {
+                return Ok("Email verification successful.");
+            }
+            else
+            {
+                return BadRequest("Invalid or expired verification token.");
+            }
+        }
+
+
+        // Forgot Password
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword( [FromBody] ForgotPasswordDto model)
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
+            {
+                // User not found or email not confirmed
+                return BadRequest("Invalid email address.");
+            }
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            string resetUrl = $"http://localhost:4200/change-password?email={model.Email}&token={token}";
+
+            var emailBody = $"Please click the following link to reset your password:{resetUrl}";
+            // Send verification email
+            await _emailService.SendEmailAsync(model.Email, "Reset Password", emailBody);
+            
+            return Ok("Password reset link sent successfully.");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            Console.WriteLine(model.Token);
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // User not found
+                return BadRequest("Invalid email address.");
+            }
+            
+            var result = await userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok("Password reset successfully.");
+            }
+            else
+            {
+                // Password reset failed
+                return BadRequest("Unable to reset password.");
+            }
+        }
+
     }
 }
