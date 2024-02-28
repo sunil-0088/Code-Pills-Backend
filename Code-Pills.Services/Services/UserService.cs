@@ -29,21 +29,20 @@ namespace Code_Pills.Services.Services
                 // User not found
                 return false;
             }
-            user.EmailConfirmed = true;
+          
             // Verify the email using the provided token
-            this.dbContext.Users.Update(user);
             
-            //var result = await _userManager.ConfirmEmailAsync(user, token);
-            await this.dbContext.SaveChangesAsync();
-            if (this.dbContext.SaveChangesAsync() !=null)
+            
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
             {
-                // Email verification successful
+                // Email successfully verified
                 return true;
             }
             else
             {
                 // Email verification failed
-                // Handle errors or log them
                 return false;
             }
         }

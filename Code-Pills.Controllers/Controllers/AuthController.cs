@@ -20,61 +20,66 @@ namespace Code_Pills.Controllers.Controllers
         private readonly IEmailService _emailService;
         private readonly IUserService _userService;
 
-        public AuthController( UserManager<IdentityUser> userManager, IJwtToken tokenService, IEmailService emailService, IUserService userService)
+        public AuthController(UserManager<IdentityUser> userManager, IJwtToken tokenService, IEmailService emailService, IUserService userService)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
             _emailService = emailService;
             _userService = userService;
         }
+
+        // From register button api end point
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
-                    // Create Identity user
-                    var user = new IdentityUser
-                    {
-                        UserName = request.Email?.Trim(),
-                        Email = request.Email?.Trim(),
-                    };
-                    var identityResult = await userManager.CreateAsync(user, request.Password);
-                    if (identityResult.Succeeded)
-                    {
-                        identityResult = await userManager.AddToRoleAsync(user, "User");
-                        if (identityResult.Succeeded)
-                        {
-                            // Generating Verificatiom token
+            bool isRegister = true;
+            
+            // Create Identity user
+            var user = new IdentityUser
+            {
+                UserName = request.UserName?.Trim(),
+                Email = request.Email?.Trim(),
+            };
+            var identityResult = await userManager.CreateAsync(user, request.Password);
+            if (identityResult.Succeeded)
+            {
+                identityResult = await userManager.AddToRoleAsync(user, "User");
+                if (identityResult.Succeeded)
+                {
+                    // Generating Verificatiom token
 
-                            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                            var verificationLink = $"https://localhost:7010/api/Auth/verify?userId={user.Id}&token={token}";
-                            var emailBody = $"Please click the following link to verify your email address:{verificationLink}";
-                            // Send verification email
-                            await _emailService.SendEmailAsync(request.Email, "Email Verification", emailBody);
-                            return Ok(new { message = "Registration successful. Please check your email for verification instructions." });
-                        }
-                        else
-                        {
-                            if (identityResult.Errors.Any())
-                            {
-                                foreach (var error in identityResult.Errors)
-                                {
-                                    ModelState.AddModelError("", error.Description);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (identityResult.Errors.Any())
-                        {
-                            foreach (var error in identityResult.Errors)
-                            {
-                                ModelState.AddModelError("", error.Description);
-                            }
-                        }
-                    }
-                    return ValidationProblem(ModelState);
-
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var verificationLink = $"https://localhost:7010/api/Auth/verify?userId={user.Id}&token={token}";
+                   
+                    // Send verification email
+                    await _emailService.SendEmailAsync(request.Email, "Email Verification", verificationLink, isRegister);
+                    return Ok(new { message = "Registration successful. Please check your email for verification instructions." });
                 }
+                else
+                {
+                    if (identityResult.Errors.Any())
+                    {
+                        foreach (var error in identityResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (identityResult.Errors.Any())
+                {
+                    foreach (var error in identityResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+            return ValidationProblem(ModelState);
+
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
@@ -82,10 +87,10 @@ namespace Code_Pills.Controllers.Controllers
             // checking email
             var identityUser = await userManager.FindByEmailAsync(request.Email);
 
-            if(identityUser != null && identityUser.EmailConfirmed)
+            if (identityUser != null && identityUser.EmailConfirmed)
             {
-                var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser,request.Password);
-                if(checkPasswordResult)
+                var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, request.Password);
+                if (checkPasswordResult)
                 {
                     var roles = await userManager.GetRolesAsync(identityUser);
 
@@ -102,7 +107,7 @@ namespace Code_Pills.Controllers.Controllers
                 }
             }
             ModelState.AddModelError("", "Email or password is incorrect");
-            return Ok();
+            return ValidationProblem(ModelState);
         }
 
         // Handling Google signing
@@ -170,7 +175,7 @@ namespace Code_Pills.Controllers.Controllers
             }
         }
 
-        // email verification 
+        // email verification from link given in email for register
 
         [HttpGet("verify")]
         public async Task<IActionResult> VerifyEmail(string userId, string token)
@@ -179,8 +184,8 @@ namespace Code_Pills.Controllers.Controllers
             {
                 return BadRequest("Invalid verification token.");
             }
-
-            var isVerified= await _userService.VerifyEmailAsync(userId,token);
+            string tokenWithoutSpaces = token.Replace(" ", "+");
+            var isVerified = await _userService.VerifyEmailAsync(userId, tokenWithoutSpaces);
 
             if (isVerified)
             {
@@ -196,8 +201,9 @@ namespace Code_Pills.Controllers.Controllers
         // Forgot Password
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword( [FromBody] ForgotPasswordDto model)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
+            
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
             {
@@ -210,13 +216,13 @@ namespace Code_Pills.Controllers.Controllers
 
             var emailBody = $"Please click the following link to reset your password:{resetUrl}";
             // Send verification email
-            await _emailService.SendEmailAsync(model.Email, "Reset Password", emailBody);
-            
+            await _emailService.SendEmailAsync(model.Email, "Reset Password", resetUrl, false);
+
             return Ok("Password reset link sent successfully.");
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
         {
             Console.WriteLine(model.Token);
             var user = await userManager.FindByEmailAsync(model.Email);
@@ -225,7 +231,7 @@ namespace Code_Pills.Controllers.Controllers
                 // User not found
                 return BadRequest("Invalid email address.");
             }
-            
+
             var result = await userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
             if (result.Succeeded)
             {
