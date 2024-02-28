@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Code_Pills.DataAccess.Migrations.AuthDb
+namespace Code_Pills.DataAccess.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
     partial class AuthDbContextModelSnapshot : ModelSnapshot
@@ -159,15 +159,15 @@ namespace Code_Pills.DataAccess.Migrations.AuthDb
                         {
                             Id = "0d88f3e7-d8ad-40eb-8c9b-85e45e83bdb0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3c454210-04e8-4a2b-a1e8-fd6056034343",
+                            ConcurrencyStamp = "35fa8957-d171-4e19-a571-6dfadcaa6934",
                             Email = "admin@codepills.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CODEPILLS.COM",
                             NormalizedUserName = "ADMIN@CODEPILLS.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJd+OMRYI/3EwoD6PwROAZfYwB5EFkmlnxtIhusHvi4SRSHCaYVrfGRWFJKkPaojmw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELEnpajGj/4L9bcBkz41hUaxEHviAbwJCMGzpDR1mJ2V88QJiWQXIjn/jW3ZmQgDXw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "54856d60-e93c-4c65-8bf7-f8f7d1a92ccf",
+                            SecurityStamp = "449aa6b1-9a59-4d55-9e87-6e026a08d227",
                             TwoFactorEnabled = false,
                             UserName = "admin@codepills.com"
                         });

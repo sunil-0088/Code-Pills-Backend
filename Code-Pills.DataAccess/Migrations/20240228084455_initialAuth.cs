@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Code_Pills.DataAccess.Migrations.AuthDb
+namespace Code_Pills.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity : Migration
+    public partial class initialAuth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -170,7 +170,7 @@ namespace Code_Pills.DataAccess.Migrations.AuthDb
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "0d88f3e7-d8ad-40eb-8c9b-85e45e83bdb0", 0, "3c454210-04e8-4a2b-a1e8-fd6056034343", "admin@codepills.com", false, false, null, "ADMIN@CODEPILLS.COM", "ADMIN@CODEPILLS.COM", "AQAAAAIAAYagAAAAEJd+OMRYI/3EwoD6PwROAZfYwB5EFkmlnxtIhusHvi4SRSHCaYVrfGRWFJKkPaojmw==", null, false, "54856d60-e93c-4c65-8bf7-f8f7d1a92ccf", false, "admin@codepills.com" });
+                values: new object[] { "0d88f3e7-d8ad-40eb-8c9b-85e45e83bdb0", 0, "35fa8957-d171-4e19-a571-6dfadcaa6934", "admin@codepills.com", false, false, null, "ADMIN@CODEPILLS.COM", "ADMIN@CODEPILLS.COM", "AQAAAAIAAYagAAAAELEnpajGj/4L9bcBkz41hUaxEHviAbwJCMGzpDR1mJ2V88QJiWQXIjn/jW3ZmQgDXw==", null, false, "449aa6b1-9a59-4d55-9e87-6e026a08d227", false, "admin@codepills.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

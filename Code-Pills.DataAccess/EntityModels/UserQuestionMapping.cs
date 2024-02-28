@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace Code_Pills.DataAccess.EntityModels
 {
-    public class ContestUserMapping
+    public class UserQuestionMapping
     {
-        [Key] 
+        [Key]
         public Guid Id { get; set; }
-        public string? Status { get; set; }
-        public string? TimeTaken { get; set; }
+        public bool IsSolved { get; set; }
+        public string? Solution { get; set; }
+
         [ForeignKey("PersonalInfo")]
         public string PersonalInfoId { get; set; }
-        [ForeignKey("Contest")]
-        public Guid ContestId { get; set; }
-        public virtual Contest Contest { get; set; }
+        [ForeignKey("Question")]
+        public Guid QuestionId { get; set; }
+        public virtual Question Question { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }
-
     }
 }

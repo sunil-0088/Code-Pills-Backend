@@ -1,19 +1,29 @@
 using Code_Pills.DataAccess.Context;
-using Code_Pills.DataAccess.Models;
+using Code_Pills.DataAccess.Interface;
+using Code_Pills.DataAccess.Repositories;
 using Code_Pills.Services.Interface;
 using Code_Pills.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
+using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IContestService, ContestService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IProblemService, ProblemService>();
+builder.Services.AddScoped<IContestRepo, ContestRepo>();
+builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+builder.Services.AddScoped<IHomeRepo, HomeRepo>();
+builder.Services.AddScoped<IProblemRepo, ProblemRepo>();
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddAutoMapper(typeof(Code_Pills.Services.Mapper.MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CodePillsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
 // registering authDbContext for identity
 builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CodePillsDB")));
 
