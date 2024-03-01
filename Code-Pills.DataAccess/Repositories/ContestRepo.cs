@@ -38,7 +38,7 @@ namespace Code_Pills.DataAccess.Repositories
             {
                 applicant.TotalPoints = 0;
                 Guid contestId = applicant.ContestId;
-                Contest contest = await _dbContext.Contests.FirstOrDefaultAsync(contest => contest.Id == contestId);
+                Contest? contest = await _dbContext.Contests.FirstOrDefaultAsync(contest => contest.Id == contestId);
                 contest.Attendees = contest.Attendees + 1;
                 await _dbContext.ContestUserMappings.AddAsync(applicant);
                 await _dbContext.SaveChangesAsync();
@@ -82,7 +82,7 @@ namespace Code_Pills.DataAccess.Repositories
         {
             try
             {
-                List<Guid> registerdContestIds = await _dbContext.ContestUserMappings.Where(user => user.UserId == Id)
+                List<Guid> registerdContestIds = await _dbContext.ContestUserMappings.Where(user => user.UserId == Id && user.Status == "reg")
                     .Select(contest => contest.ContestId).ToListAsync();
                 IEnumerable<Contest> registerdContests = new List<Contest>();
                 if (registerdContestIds.Count > 0)
@@ -91,7 +91,7 @@ namespace Code_Pills.DataAccess.Repositories
                     foreach (Guid contestId in registerdContestIds)
                     {
                         registerdContest.Add(await _dbContext.Contests
-                           .Where(contest => contest.Id == contestId)
+                           .Where(contest => contest.Id == contestId && contest.StartTime > DateTime.Now)
                            .FirstAsync());
                     }
                     registerdContests = registerdContest;
@@ -102,32 +102,19 @@ namespace Code_Pills.DataAccess.Repositories
                 return null;
             }
         }
-        public async Task<IEnumerable<Contest>> GetActiveContests(string Id)
+        public async Task<IEnumerable<Contest>> GetActiveContests()
         {
             try
             {
-                IEnumerable<Guid> registeredContestIds = await _dbContext.ContestUserMappings
-                .Where(applicants => applicants.UserId == Id).Select(application => application.ContestId).ToListAsync();
+                Console.WriteLine(DateTime.UtcNow);
+                Contest contest = await _dbContext.Contests.FirstAsync();
+                Console.WriteLine(contest.StartTime.TimeOfDay);
+                Console.WriteLine(contest.StartTime.AddMinutes(20) !< DateTime.UtcNow);
+                IEnumerable<Contest> activeContests = await _dbContext.Contests
+                .Where(contest => contest.StartTime < DateTime.UtcNow)
+                .ToListAsync();
 
-                IEnumerable<Contest>? activeContests = null;
-                if(registeredContestIds == null)
-                {
-                    return activeContests;
-                }
-                else
-                {
-                    List<Contest> contestList = new List<Contest>();
-                    foreach (Guid contestId in registeredContestIds)
-                    {
-                        Contest? contest = await _dbContext.Contests.Where(contest => contest.Id == contestId && contest.StartTime < DateTime.Now && contest.EndTime > DateTime.Now).FirstOrDefaultAsync();
-                        if (contest != null)
-                        {
-                            contestList.Add(contest);
-                        }
-                    }
-                    activeContests = contestList;
-                    return activeContests;
-                }
+                return activeContests;
             }
             catch(Exception ex)
             {

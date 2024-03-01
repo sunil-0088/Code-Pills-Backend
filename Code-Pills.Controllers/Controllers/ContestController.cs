@@ -45,9 +45,9 @@ namespace Code_Pills.Controllers.Controllers
         }
 
         [HttpGet("ActiveContests")]
-        public async Task<IActionResult> GetActiveContesst(string userId)
+        public async Task<IActionResult> GetActiveContesst()
         {
-            return Ok(await _contestSerivce.GetActiveContests(userId));
+            return Ok(await _contestSerivce.GetActiveContests());
         }
 
     }
