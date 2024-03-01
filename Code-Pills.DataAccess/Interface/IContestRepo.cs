@@ -13,7 +13,8 @@ namespace Code_Pills.DataAccess.Interface
         Task<string> SaveContest(Contest contest);
         Task<string> SaveParticipation(ContestUserMapping applicant);
         Task<string> SaveContestResult(Contest results);
-        Task<IEnumerable<Contest>> GetContest();
-        Task<IEnumerable<Contest>> GetRegisteredContest(string Id);
+        Task<IEnumerable<Contest>> GetUpcomingContests();
+        Task<IEnumerable<Contest>> GetRegisteredContests(string Id);
+        Task<IEnumerable<Contest>> GetActiveContests(string Id);
     }
 }

@@ -9,11 +9,11 @@ namespace Code_Pills.Services.DTOs
     public class PerformanceDTO
     {
         public string UserID { get; set; }
-        public string TotalCredits { get; set; }
-        public string CreditsLeft { get; set; }
-        public string Rating { get; set; }
-        public string Attempts { get; set; }
-        public string Solved { get; set; }  
+        public int TotalCredits { get; set; }
+        public int CreditsLeft { get; set; }
+        public float Rating { get; set; }
+        public int Attempts { get; set; }
+        public int Solved { get; set; }  
 
 
     }

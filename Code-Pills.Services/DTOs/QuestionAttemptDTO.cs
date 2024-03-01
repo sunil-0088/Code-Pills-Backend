@@ -9,7 +9,7 @@ namespace Code_Pills.Services.DTOs
     public class QuestionAttemptDTO
     {
         public string UserId { get; set; }
-        public Guid QuestionId { get; set; }
+        public string QuestionId { get; set; }
         public bool IsSolved { get; set; }
         public string Solution { get; set; }
     }

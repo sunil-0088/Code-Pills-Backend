@@ -19,30 +19,35 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _contestSerivce.SaveContest(contest));
         }
+
         [HttpPost("AddToContest")]
         public async Task<IActionResult> SaveParticipation(ContestApplicantDTO applicant)
         {
             return Ok(await _contestSerivce.SaveParticipation(applicant));
         }
+
         [HttpPut("ContestResult")]
         public async Task<IActionResult> SaveContestResult(ContestDTO results)
         {
             return Ok(await _contestSerivce.SaveContestResult(results));
         }
-        /*        [HttpPut("UserResult")]
-                public async Task<IActionResult> SaveUserResult(ContestApplicantDTO applicant)
-                {
-                    return Ok(_contestSerivce.SaveUserResults(applicant));
-                }*/
-        [HttpGet("Contest")]
-        public async Task<IActionResult> GetContest()
+
+        [HttpGet("UpcomingContests")]
+        public async Task<IActionResult> GetUpcomingContests()
         {
-            return Ok(await _contestSerivce.GetContest());
+            return Ok(await _contestSerivce.GetUpcomingContests());
         }
-        [HttpGet("RegisteredContest")]
-        public async Task<IActionResult> GetRegisteredContest(string userId)
+
+        [HttpGet("RegisteredContests")]
+        public async Task<IActionResult> GetRegisteredContests(string userId)
         {
-            return Ok(await _contestSerivce.GetRegisteredContest(userId));
+            return Ok(await _contestSerivce.GetRegisteredContests(userId));
+        }
+
+        [HttpGet("ActiveContests")]
+        public async Task<IActionResult> GetActiveContesst(string userId)
+        {
+            return Ok(await _contestSerivce.GetActiveContests(userId));
         }
 
     }

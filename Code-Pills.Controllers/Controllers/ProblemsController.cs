@@ -19,11 +19,11 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _problemService.SaveQuestion(question));
         }
-        /*[HttpPut("Question")]
-        public async Task<IActionResult> EditQuestion(QuestionDTO question)
-        {
+        //[HttpPut("Question")]
+        //public async Task<IActionResult> EditQuestion(QuestionDTO question)
+        //{
 
-        }*/
+        //}
         [HttpPost("AddUserAttempt")]
         public async Task<IActionResult> SaveUserAttempt(QuestionAttemptDTO question)
         {

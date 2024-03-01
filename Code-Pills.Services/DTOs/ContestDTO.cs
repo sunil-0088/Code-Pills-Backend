@@ -8,7 +8,7 @@ namespace Code_Pills.Services.DTOs
 {
     public class ContestDTO
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; }    
         public string Title { get; set; }
         public string Description { get; set; }
         public string Difficulty { get; set; }
@@ -17,8 +17,5 @@ namespace Code_Pills.Services.DTOs
         public string? Prize3 { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string? Winner1 { get; set; }
-        public string? Winner2 { get; set; }
-        public string? Winner3 { get; set; }
     }
 }

@@ -10,13 +10,12 @@ namespace Code_Pills.DataAccess.EntityModels
 {
     public class ContestUserMapping
     {
-        [Key] 
         public Guid Id { get; set; }
-        public string? Status { get; set; }
-        public string? TimeTaken { get; set; }
-        [ForeignKey("PersonalInfo")]
-        public string PersonalInfoId { get; set; }
-        [ForeignKey("Contest")]
+        public string Status { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int TotalPoints { get; set; }
+        public string UserId { get; set; }
         public Guid ContestId { get; set; }
         public virtual Contest Contest { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }

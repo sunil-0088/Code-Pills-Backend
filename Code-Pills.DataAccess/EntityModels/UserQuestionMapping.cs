@@ -10,15 +10,11 @@ namespace Code_Pills.DataAccess.EntityModels
 {
     public class UserQuestionMapping
     {
-        [Key]
         public Guid Id { get; set; }
         public bool IsSolved { get; set; }
-        public string? Solution { get; set; }
-
-        [ForeignKey("PersonalInfo")]
-        public string PersonalInfoId { get; set; }
-        [ForeignKey("Question")]
-        public Guid QuestionId { get; set; }
+        public string Solution { get; set; }
+        public string UserId { get; set; }
+        public string QuestionId { get; set; }
         public virtual Question Question { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }
     }

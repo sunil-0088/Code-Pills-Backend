@@ -49,7 +49,7 @@ namespace Code_Pills.DataAccess.Repositories
         {
             try
             {
-                PerformanceMapping previousPerformance = await _dbContext.PerformanceMappings.FirstOrDefaultAsync(user => user.PersonalInfoId == performance.PersonalInfoId);
+                PerformanceMapping previousPerformance = await _dbContext.PerformanceMappings.FirstOrDefaultAsync(user => user.UserId == performance.UserId);
                 previousPerformance = performance;
                 await _dbContext.SaveChangesAsync();
                 return "Performance Edited Succesfully";
