@@ -106,15 +106,15 @@ namespace Code_Pills.DataAccess.Repositories
         {
             try
             {
-                Console.WriteLine(DateTime.UtcNow);
-                Contest contest = await _dbContext.Contests.FirstAsync();
-                Console.WriteLine(contest.StartTime.TimeOfDay);
-                Console.WriteLine(contest.StartTime.AddMinutes(20) !< DateTime.UtcNow);
-                IEnumerable<Contest> activeContests = await _dbContext.Contests
-                .Where(contest => contest.StartTime < DateTime.UtcNow)
-                .ToListAsync();
-
-                return activeContests;
+                List<Contest> activeContests = new List<Contest>();
+                foreach (Contest contest in _dbContext.Contests)
+                {
+                    if (contest.StartTime < DateTime.Now && contest.StartTime.AddMinutes(20) >= DateTime.Now)
+                    {
+                        activeContests.Add(contest);
+                    }
+                }
+                return activeContests; ;
             }
             catch(Exception ex)
             {
