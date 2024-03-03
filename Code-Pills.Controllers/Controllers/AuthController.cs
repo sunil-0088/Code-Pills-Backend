@@ -1,13 +1,8 @@
-﻿using Azure.Core;
-using Code_Pills.DataAccess.Models;
-using Code_Pills.Services.DTOs;
+﻿using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
-using Code_Pills.Services.Services;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System.Net;
+
 
 namespace Code_Pills.Controllers.Controllers
 {
