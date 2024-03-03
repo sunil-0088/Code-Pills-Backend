@@ -35,7 +35,11 @@ namespace Code_Pills.DataAccess.Repositories
         public async Task<string> SaveParticipation(ContestUserMapping applicant)
         {
             try
-            { 
+            {
+                applicant.TotalPoints = 0;
+                Guid contestId = applicant.ContestId;
+                Contest? contest = await _dbContext.Contests.FirstOrDefaultAsync(contest => contest.Id == contestId);
+                contest.Attendees = contest.Attendees + 1;
                 await _dbContext.ContestUserMappings.AddAsync(applicant);
                 await _dbContext.SaveChangesAsync();
                 return "Participation Saved Successfully";
@@ -61,35 +65,60 @@ namespace Code_Pills.DataAccess.Repositories
                 return "";
             }
         }
-        public async Task<IEnumerable<Contest>> GetContest()
+        public async Task<IEnumerable<Contest>> GetUpcomingContests()
         {
-            IEnumerable<Contest> activeContest = await _dbContext.Contests
-                .Where(contest => contest.StartTime > DateTime.Now).ToListAsync();
-            return activeContest;
-        }
-        public async Task<IEnumerable<Contest>> GetRegisteredContest(string Id)
-        {
-            IEnumerable<Guid> registeredContestIds = await _dbContext.ContestUserMappings
-                .Where(applicants => applicants.PersonalInfoId == Id).Select(application => application.ContestId).ToListAsync();
-
-            IEnumerable<Contest>? registeredContests = null;
-            if(registeredContestIds == null)
-            {
-                return registeredContests;
-            }
             try
             {
-                List<Contest> contestList = new List<Contest>();
-                foreach (Guid id in registeredContestIds)
-                {
-                    contestList.Add(await _dbContext.Contests.Where(contest => contest.Id == id).FirstOrDefaultAsync());
-                }
-                registeredContests = contestList;
-                return registeredContests;
+                IEnumerable<Contest> activeContest = await _dbContext.Contests
+                    .Where(contest => contest.StartTime > DateTime.Now).ToListAsync();
+                return activeContest;
             }
             catch(Exception ex)
             {
-                return registeredContests;
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Contest>> GetRegisteredContests(string Id)
+        {
+            try
+            {
+                List<Guid> registerdContestIds = await _dbContext.ContestUserMappings.Where(user => user.UserId == Id && user.Status == "reg")
+                    .Select(contest => contest.ContestId).ToListAsync();
+                IEnumerable<Contest> registerdContests = new List<Contest>();
+                if (registerdContestIds.Count > 0)
+                {
+                    List<Contest> registerdContest = new List<Contest>();
+                    foreach (Guid contestId in registerdContestIds)
+                    {
+                        registerdContest.Add(await _dbContext.Contests
+                           .Where(contest => contest.Id == contestId && contest.StartTime > DateTime.Now)
+                           .FirstAsync());
+                    }
+                    registerdContests = registerdContest;
+                }
+                return registerdContests;
+            }catch(Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Contest>> GetActiveContests()
+        {
+            try
+            {
+                List<Contest> activeContests = new List<Contest>();
+                foreach (Contest contest in _dbContext.Contests)
+                {
+                    if (contest.StartTime < DateTime.Now && contest.StartTime.AddMinutes(20) >= DateTime.Now)
+                    {
+                        activeContests.Add(contest);
+                    }
+                }
+                return activeContests; ;
+            }
+            catch(Exception ex)
+            {
+                return null;
 
             }
         }

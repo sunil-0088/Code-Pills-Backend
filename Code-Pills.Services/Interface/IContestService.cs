@@ -13,7 +13,8 @@ namespace Code_Pills.Services.Interface
         Task<string> SaveContest(ContestDTO contest);
         Task<string> SaveParticipation(ContestApplicantDTO applicant);
         Task<string> SaveContestResult(ContestDTO results);
-        Task<IEnumerable<ContestDTO>> GetContest();
-        Task<IEnumerable<ContestDTO>> GetRegisteredContest(string Id);
+        Task<IEnumerable<ContestDTO>> GetUpcomingContests();
+        Task<IEnumerable<ContestDTO>> GetRegisteredContests(string Id);
+        Task<IEnumerable<ContestDTO>> GetActiveContests();
     }
 }

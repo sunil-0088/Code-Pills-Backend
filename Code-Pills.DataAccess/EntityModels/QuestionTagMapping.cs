@@ -11,14 +11,10 @@ namespace Code_Pills.DataAccess.EntityModels
 {
     public class QuestionTagMapping
     {
-        [Key]
         public Guid Id { get; set; }
-        [ForeignKey("Tag")]
         public int TagId { get; set; }
         public virtual Tag Tag { get; set;}
-
-        [ForeignKey("Question")]
-        public Guid QuestionId { get; set; }
+        public string QuestionId { get; set; }
         public virtual Question Question { get; set;}
     }
 }

@@ -10,9 +10,10 @@ namespace Code_Pills.Services.DTOs
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string UserName { get; set; }
         public string Email { get; set; }
         public string Skills { get; set; }
-        public string Profesion { get; set; }
+        public string Profession { get; set; }
         public DateTime DOB { get; set; }
         public string Gender { get; set; }
         public string About { get; set; }

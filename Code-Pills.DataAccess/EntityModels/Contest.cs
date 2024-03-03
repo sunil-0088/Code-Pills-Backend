@@ -9,7 +9,6 @@ namespace Code_Pills.DataAccess.EntityModels
 {
     public class Contest
     {
-        [Key]
         public Guid Id { get; set; }
         public required string Title { get; set; }
         public required string Description { get; set; }
@@ -23,6 +22,7 @@ namespace Code_Pills.DataAccess.EntityModels
         public string? Winner1 { get; set; }
         public string? Winner2 { get; set;}
         public string? Winner3 { get; set;}
-        public virtual ICollection<ContestQuestionMapping> ContestQuestionMappings { get; set; }
+        public virtual ICollection<ContestQuestionMapping> ContestQuestionMapping { get; set; }
+        public virtual ICollection<ContestUserMapping> ContestUserMapping { get; set; }
     }
 }

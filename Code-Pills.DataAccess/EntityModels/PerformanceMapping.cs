@@ -11,15 +11,13 @@ namespace Code_Pills.DataAccess.EntityModels
 {
     public class PerformanceMapping
     {
-        [Key]
         public Guid Id { get; set; }
-        public required string TotalCredits { get; set; }
-        public required string CreditsLeft { get; set; }
-        public required string Rating { get; set; }
-        public required string Attempts { get; set; }
-        public required string Solved { get; set; }
-        [ForeignKey("PersonalInfo")]
-        public string PersonalInfoId { get; set; }
+        public int TotalCredits { get; set; }
+        public int CreditsLeft { get; set; }
+        public float Rating { get; set; }
+        public int Attempts { get; set; }
+        public int Solved { get; set; }
+        public string UserId { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }
     }
 }

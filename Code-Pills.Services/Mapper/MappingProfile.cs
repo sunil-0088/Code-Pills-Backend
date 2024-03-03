@@ -16,12 +16,12 @@ namespace Code_Pills.Services.Mapper
             CreateMap<Contest, ContestDTO>();
             CreateMap<ProfileDTO, PersonalInfo>();
             CreateMap<PerformanceDTO, PerformanceMapping>()
-                .ForMember(dest => dest.PersonalInfoId, opt => opt.MapFrom(src => src.UserID));
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserID));
             CreateMap<ContestApplicantDTO, ContestUserMapping>()
-                .ForPath(dest => dest.PersonalInfoId, opt => opt.MapFrom(src => src.UserId));
+                .ForPath(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
             CreateMap<QuestionDTO, Question>();
             CreateMap<QuestionAttemptDTO, UserQuestionMapping>()
-                .ForMember(dest => dest.PersonalInfoId, opt => opt.MapFrom(src => src.UserId));
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
         }
     }
 }

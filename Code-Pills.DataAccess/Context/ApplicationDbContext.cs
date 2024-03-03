@@ -1,4 +1,5 @@
-﻿using Code_Pills.DataAccess.EntityModels;
+﻿using Code_Pills.DataAccess.Config;
+using Code_Pills.DataAccess.EntityModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,18 @@ namespace Code_Pills.DataAccess.Context
         public DbSet<ContestQuestionMapping> ContestQuestionMappings { get; set; }
         public DbSet<QuestionTagMapping> QuestionTagMappings { get; set; }
         public DbSet<UserQuestionMapping> UserQuestionMappings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new ContestConfig());
+            modelBuilder.ApplyConfiguration(new ContestQuestionConfig());
+            modelBuilder.ApplyConfiguration(new ContestUserConfig());
+            modelBuilder.ApplyConfiguration(new PerformanceConfig());
+            modelBuilder.ApplyConfiguration(new PersonalInfoConfig());
+            modelBuilder.ApplyConfiguration(new QuestionConfig());
+            modelBuilder.ApplyConfiguration(new QuestionTagConfig());
+            modelBuilder.ApplyConfiguration(new UserQuestionConfig());
+        }
     }
 }
