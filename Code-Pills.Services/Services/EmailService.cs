@@ -1,4 +1,7 @@
-﻿using Code_Pills.Services.Interface;
+﻿using Code_Pills.DataAccess.Context;
+using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,12 @@ namespace Code_Pills.Services.Services
 {
     public class EmailService : IEmailService
     {
+        private readonly ApplicationDbContext dbContext;
+
+        public EmailService(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public async Task SendEmailAsync(string toEmail, string subject, string link, bool isRegister)
         {
 
@@ -25,7 +34,19 @@ namespace Code_Pills.Services.Services
                 smtpClient.EnableSsl = true;
                 if (isRegister)
                 {
-                    body = await this.SendRegistrationEmail(link);
+                    Random random = new Random();
+
+                    // Generate a random 6-digit number
+                    int randomNumber = random.Next(100000, 1000000);
+                    body = await this.SendRegistrationEmail(link, randomNumber);
+                    var dataRow = new UserOtp()
+                    {
+                        Id = Guid.NewGuid(),
+                        Email = toEmail,
+                        Otp = randomNumber,
+                    };
+                    await dbContext.UserOtp.AddAsync(dataRow);
+                    await dbContext.SaveChangesAsync();
                 }
                 else
                 {
@@ -43,7 +64,7 @@ namespace Code_Pills.Services.Services
             }
         }
 
-        public async Task<string> SendRegistrationEmail(string link)
+        public async Task<string> SendRegistrationEmail(string link, int otpcode)
         {
             Console.WriteLine(link);
             string body = $@"<!DOCTYPE html>
@@ -57,12 +78,11 @@ namespace Code_Pills.Services.Services
 <div style=""max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"">
     <h2 style=""color: #333333;"">Email Verification</h2>
     <p style=""color: #666666;"">Hello,</p>
-    <p style=""color: #666666;"">Thank you for registering on our website. To complete your registration, please click the button below to verify your email address:</p>
-    <p style=""text-align: center;"">
-        <a href=""{link}"" style=""background-color: #6355D8; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; display: inline-block;"">Verify Email</a>
-    </p>
-    <p style=""color: #666666;"">Alternatively, you can copy and paste the following link into your browser's address bar:</p>
-    
+    <p style=""color: #666666;"">Thank you for registering on our website. To complete your registration, please enter the security code below to verify your email address:</p>
+     <h2>Here is a your 6-digit code:</h2>
+  <p style=""background-color: #f2f2f2; padding: 16px; border-radius: 5px; font-size:24px; text-align: center; letter-spacing:3"">
+    <strong>{otpcode}</strong>
+  </p>
     <p style=""color: #666666;"">If you have any questions or need assistance, please contact our support team at support@codepills.com.</p>
     <p style=""color: #666666;"">Thank you,<br/>The Codepills Team</p>
 </div>

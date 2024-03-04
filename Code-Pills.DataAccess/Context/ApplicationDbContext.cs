@@ -35,5 +35,6 @@ namespace Code_Pills.DataAccess.Context
             modelBuilder.ApplyConfiguration(new QuestionTagConfig());
             modelBuilder.ApplyConfiguration(new UserQuestionConfig());
         }
+        public DbSet<UserOtp> UserOtp { get; set; }
     }
 }

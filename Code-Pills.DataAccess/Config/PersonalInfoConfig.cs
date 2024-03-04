@@ -14,13 +14,13 @@ namespace Code_Pills.DataAccess.Config
         public void Configure(EntityTypeBuilder<PersonalInfo> builder)
         {
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Name).IsRequired()
+            builder.Property(p => p.Name)
                 .HasMaxLength(50);
-            builder.Property(p => p.Profession).IsRequired();
+           // builder.Property(p => p.Profession).IsRequired();
             builder.Property(p => p.Email).IsRequired();
             builder.HasIndex(p => p.Email).IsUnique();
-            builder.Property(p => p.DOB).IsRequired();
-            builder.Property(p => p.Skills).IsRequired();
+           // builder.Property(p => p.DOB).IsRequired();
+            //builder.Property(p => p.Skills).IsRequired();
         }
     }
 }

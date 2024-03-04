@@ -1,13 +1,9 @@
-﻿using Azure.Core;
-using Code_Pills.DataAccess.Models;
-using Code_Pills.Services.DTOs;
+﻿using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
-using Code_Pills.Services.Services;
-using Microsoft.AspNetCore.Diagnostics;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System.Net;
+
 
 namespace Code_Pills.Controllers.Controllers
 {
@@ -38,14 +34,18 @@ namespace Code_Pills.Controllers.Controllers
             // Create Identity user
             var user = new IdentityUser
             {
-                UserName = request.UserName?.Trim(),
+                UserName = request.Email?.Trim(),
                 Email = request.Email?.Trim(),
             };
             var identityResult = await userManager.CreateAsync(user, request.Password);
             if (identityResult.Succeeded)
             {
+                // saving Emial in personalInfo table 
+
+                var isPersonalInfoSaved = await _userService.AddPersonalInformation(user.Id, user.Email!);
+               
                 identityResult = await userManager.AddToRoleAsync(user, "User");
-                if (identityResult.Succeeded)
+                if (identityResult.Succeeded && isPersonalInfoSaved)
                 {
                     // Generating Verificatiom token
 
@@ -147,8 +147,19 @@ namespace Code_Pills.Controllers.Controllers
                     identityResult = await userManager.AddToRoleAsync(user, "User");
                     if (identityResult.Succeeded)
                     {
-                        var isMarked = await this._userService.MarkEmailConfirm(user);
-                        return Ok(isMarked);
+                        await _userService.AddPersonalInformation(user.Id, user.Email!);
+                        var roles = await userManager.GetRolesAsync(user);
+                        await _userService.MarkEmailConfirm(user);
+
+                        var token = tokenService.CreateToken(user, roles.ToList());
+                        var response = new LoginResponseDto()
+                        {
+                            Email = user.Email,
+                            Roles = roles.ToList(),
+                            Token = token
+
+                        };
+                        return Ok(response);
                     }
                     else
                     {
@@ -177,25 +188,24 @@ namespace Code_Pills.Controllers.Controllers
 
         // email verification from link given in email for register
 
-        [HttpGet("verify")]
-        public async Task<IActionResult> VerifyEmail(string userId, string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                return BadRequest("Invalid verification token.");
-            }
-            string tokenWithoutSpaces = token.Replace(" ", "+");
-            var isVerified = await _userService.VerifyEmailAsync(userId, tokenWithoutSpaces);
+        //[HttpGet("verify")]
+        //public async Task<IActionResult> VerifyEmail(string email, string otp)
+        //{
+        //    if (string.IsNullOrEmpty(email))
+        //    {
+        //        return BadRequest("Invalid verification Email.");
+        //    }
+        //    var isVerified = await _userService.VerifyEmailAsync(email, otp);
 
-            if (isVerified)
-            {
-                return Ok("Email verification successful.");
-            }
-            else
-            {
-                return BadRequest("Invalid or expired verification token.");
-            }
-        }
+        //    if (isVerified!= null)
+        //    {
+        //        return Ok(isVerified);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("Invalid or expired verification token.");
+        //    }
+        //}
 
 
         // Forgot Password
@@ -244,5 +254,11 @@ namespace Code_Pills.Controllers.Controllers
             }
         }
 
+        [HttpPost("VerifyOtp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpDto request)
+        {
+            var result = await _userService.VerifyOtp(request);
+            return Ok(result);
+        }
     }
 }
