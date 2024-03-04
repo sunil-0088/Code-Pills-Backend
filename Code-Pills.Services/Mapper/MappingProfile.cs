@@ -15,6 +15,7 @@ namespace Code_Pills.Services.Mapper
             CreateMap<ContestDTO, Contest>();
             CreateMap<Contest, ContestDTO>();
             CreateMap<ProfileDTO, PersonalInfo>();
+            CreateMap<PersonalInfo, ProfileDTO>();
             CreateMap<PerformanceDTO, PerformanceMapping>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserID));
             CreateMap<ContestApplicantDTO, ContestUserMapping>()
