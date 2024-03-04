@@ -27,6 +27,12 @@ namespace Code_Pills.Services.Services
             PersonalInfo newProfile = _mapper.Map<PersonalInfo>(profile);
             return await _profileRepo.SaveProfile(newProfile);
         }
+        public async Task<ProfileDTO?> GetProfile(string userId)
+        { 
+            PersonalInfo personalInfo=await _profileRepo.GetProfile(userId);
+            ProfileDTO userInfo = _mapper.Map < ProfileDTO >(personalInfo);
+            return userInfo;
+        }
         public async Task<string> SavePerformance(PerformanceDTO performance)
         {
             PerformanceMapping userPerformance = _mapper.Map<PerformanceMapping>(performance);
@@ -37,5 +43,6 @@ namespace Code_Pills.Services.Services
             PerformanceMapping userPerformance = _mapper.Map<PerformanceMapping>(performance);
             return await _profileRepo.EditPerformance(userPerformance);
         }
+
     }
 }

@@ -19,6 +19,28 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _profileService.SaveProfile(profile));
         }
+        [HttpGet("PersonalInfo")]
+        public async Task<IActionResult> GetProfile(string userId)
+        {
+            try
+            {
+                ProfileDTO? user = await _profileService.GetProfile(userId);
+                if(user == null)
+                {
+                    return BadRequest("User not Found");
+                }
+                else
+                {
+                     return Ok(user);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
         [HttpPost("UserPerformance")]
         public async Task<IActionResult> SavePerformance(PerformanceDTO performance)
         {
