@@ -21,5 +21,6 @@ namespace Code_Pills.DataAccess.Context
         public DbSet<ContestQuestionMapping> ContestQuestionMappings { get; set; }
         public DbSet<QuestionTagMapping> QuestionTagMappings { get; set; }
         public DbSet<UserQuestionMapping> UserQuestionMappings { get; set; }
+        public DbSet<UserOtp> UserOtp { get; set; }
     }
 }

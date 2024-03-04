@@ -18,7 +18,8 @@ builder.Services.AddScoped<IContestRepo, ContestRepo>();
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 builder.Services.AddScoped<IHomeRepo, HomeRepo>();
 builder.Services.AddScoped<IProblemRepo, ProblemRepo>();
-
+builder.Services.AddScoped<IAuthRepo, AuthRepo>();
+builder.Services.AddScoped<IJwtToken, JwtTokenService>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Code_Pills.Services.Mapper.MappingProfile));
 builder.Services.AddEndpointsApiExplorer();

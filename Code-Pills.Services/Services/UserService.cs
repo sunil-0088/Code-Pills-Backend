@@ -1,7 +1,12 @@
-﻿using Code_Pills.DataAccess.Context;
+﻿using Azure;
+using Azure.Core;
+using Code_Pills.DataAccess.Context;
+using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Models;
+using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,37 +19,43 @@ namespace Code_Pills.Services.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AuthDbContext dbContext;
+        private readonly IJwtToken jwtToken;
+        private readonly ApplicationDbContext appdbContext;
 
-        public UserService(UserManager<IdentityUser> userManager, AuthDbContext dbContext)
+        public UserService(UserManager<IdentityUser> userManager, AuthDbContext dbContext, IJwtToken jwtToken, ApplicationDbContext appdbContext)
         { 
             _userManager = userManager;
             this.dbContext = dbContext;
+            this.jwtToken = jwtToken;
+            this.appdbContext = appdbContext;
         }
-        public async Task<bool> VerifyEmailAsync(string userId, string token)
+        public async Task<Object> VerifyEmailAsync(string email, string otp)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var userId =  dbContext.Users.FirstOrDefaultAsync(user=>user.Email == email).Id;
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
             {
                 // User not found
                 return false;
             }
+            user.EmailConfirmed = true;
           
             // Verify the email using the provided token
             
-            
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = jwtToken.CreateToken(user, roles.ToList());
+            //var result = await _userManager.ConfirmEmailAsync(user, token);
+            var response = new
+            {
+                Email = user.Email!,
+                Roles = roles.ToList(),
+                Token = token
 
-            if (result.Succeeded)
-            {
-                // Email successfully verified
-                return true;
-            }
-            else
-            {
-                // Email verification failed
-                return false;
-            }
+            };
+            return true;
         }
 
         public async Task<bool> MarkEmailConfirm(IdentityUser user)
@@ -60,6 +71,46 @@ namespace Code_Pills.Services.Services
                 await this.dbContext.SaveChangesAsync();
                 return true;
             }
+        }
+
+
+        public async Task<LoginResponseDto> VerifyOtp(VerifyOtpDto req)
+        {
+            var existingOtp = await appdbContext.UserOtp.FirstOrDefaultAsync(a => a.Email == req.Email);
+            var response= new LoginResponseDto();
+            if (existingOtp == null)
+            {
+               return null;
+            }
+            else
+            {
+                var user = dbContext.Users.FirstOrDefault(a => a.Email == req.Email);
+                if (existingOtp != null) 
+                {
+                    if(existingOtp.Otp == req.Otp)
+                    {
+                        await this.MarkEmailConfirm(user);
+                        var roles = await _userManager.GetRolesAsync(user);
+
+                        // Create a Token and response
+                        var token = jwtToken.CreateToken(user, roles.ToList());
+                        response = new LoginResponseDto()
+                        {
+                            Email = req.Email,
+                            Roles = roles.ToList(),
+                            Token = token
+
+                        };
+                    }
+                    else
+                    {
+                        // otp did not match
+                    }
+                }
+            }
+            await appdbContext.SaveChangesAsync();
+
+            return response;
         }
     }
 }

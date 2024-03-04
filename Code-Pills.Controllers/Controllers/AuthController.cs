@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.DataAccess.Interface;
 using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Net;
+using static System.Net.WebRequestMethods;
 
 namespace Code_Pills.Controllers.Controllers
 {
@@ -19,13 +22,15 @@ namespace Code_Pills.Controllers.Controllers
         private readonly IJwtToken tokenService;
         private readonly IEmailService _emailService;
         private readonly IUserService _userService;
+        private readonly IAuthRepo authRepo;
 
-        public AuthController(UserManager<IdentityUser> userManager, IJwtToken tokenService, IEmailService emailService, IUserService userService)
+        public AuthController(UserManager<IdentityUser> userManager, IJwtToken tokenService, IEmailService emailService, IUserService userService, IAuthRepo authRepo)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
             _emailService = emailService;
             _userService = userService;
+            this.authRepo = authRepo;
         }
 
         // From register button api end point
@@ -38,14 +43,18 @@ namespace Code_Pills.Controllers.Controllers
             // Create Identity user
             var user = new IdentityUser
             {
-                UserName = request.UserName?.Trim(),
+                UserName = request.Email?.Trim(),
                 Email = request.Email?.Trim(),
             };
             var identityResult = await userManager.CreateAsync(user, request.Password);
             if (identityResult.Succeeded)
             {
+                // saving Emial in personalInfo table 
+
+                var isPersonalInfoSaved = await authRepo.AddPersonalInformation(user.Id, user.Email!);
+               
                 identityResult = await userManager.AddToRoleAsync(user, "User");
-                if (identityResult.Succeeded)
+                if (identityResult.Succeeded && isPersonalInfoSaved)
                 {
                     // Generating Verificatiom token
 
@@ -177,25 +186,24 @@ namespace Code_Pills.Controllers.Controllers
 
         // email verification from link given in email for register
 
-        [HttpGet("verify")]
-        public async Task<IActionResult> VerifyEmail(string userId, string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                return BadRequest("Invalid verification token.");
-            }
-            string tokenWithoutSpaces = token.Replace(" ", "+");
-            var isVerified = await _userService.VerifyEmailAsync(userId, tokenWithoutSpaces);
+        //[HttpGet("verify")]
+        //public async Task<IActionResult> VerifyEmail(string email, string otp)
+        //{
+        //    if (string.IsNullOrEmpty(email))
+        //    {
+        //        return BadRequest("Invalid verification Email.");
+        //    }
+        //    var isVerified = await _userService.VerifyEmailAsync(email, otp);
 
-            if (isVerified)
-            {
-                return Ok("Email verification successful.");
-            }
-            else
-            {
-                return BadRequest("Invalid or expired verification token.");
-            }
-        }
+        //    if (isVerified!= null)
+        //    {
+        //        return Ok(isVerified);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("Invalid or expired verification token.");
+        //    }
+        //}
 
 
         // Forgot Password
@@ -244,5 +252,11 @@ namespace Code_Pills.Controllers.Controllers
             }
         }
 
+        [HttpPost("VerifyOtp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpDto request)
+        {
+            var result = await _userService.VerifyOtp(request);
+            return Ok(result);
+        }
     }
 }
