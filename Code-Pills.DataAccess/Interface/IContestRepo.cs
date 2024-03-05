@@ -16,5 +16,6 @@ namespace Code_Pills.DataAccess.Interface
         Task<IEnumerable<Contest>> GetUpcomingContests();
         Task<IEnumerable<Contest>> GetRegisteredContests(string Id);
         Task<IEnumerable<Contest>> GetActiveContests();
+        Task<IEnumerable<Contest>> GetCompletedContests(string Id);
     }
 }

@@ -17,5 +17,6 @@ namespace Code_Pills.Services.DTOs
         public string? Prize3 { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public int Attendees { get; set; }
     }
 }

@@ -16,5 +16,6 @@ namespace Code_Pills.Services.Interface
         Task<IEnumerable<ContestDTO>> GetUpcomingContests();
         Task<IEnumerable<ContestDTO>> GetRegisteredContests(string Id);
         Task<IEnumerable<ContestDTO>> GetActiveContests();
+        Task<IEnumerable<ContestDTO>> GetCompletedContests(string Id);
     }
 }

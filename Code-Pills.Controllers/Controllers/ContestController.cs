@@ -1,4 +1,5 @@
-﻿using Code_Pills.Services.DTOs;
+﻿using Code_Pills.DataAccess.Models;
+using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,9 +46,15 @@ namespace Code_Pills.Controllers.Controllers
         }
 
         [HttpGet("ActiveContests")]
-        public async Task<IActionResult> GetActiveContesst()
+        public async Task<IActionResult> GetActiveContests()
         {
             return Ok(await _contestSerivce.GetActiveContests());
+        }
+
+        [HttpGet("CompletedContests")]
+        public async Task<IActionResult> GetCompletedContests(string userId)
+        {
+            return Ok(await _contestSerivce.GetCompletedContests(userId));
         }
 
     }

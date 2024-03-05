@@ -55,5 +55,11 @@ namespace Code_Pills.Services.Services
             IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(registeredContest);
             return contests;
         }
+        public async Task<IEnumerable<ContestDTO>> GetCompletedContests(string Id)
+        {
+            IEnumerable<Contest> completedContest = await _contestRepo.GetCompletedContests(Id);
+            IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(completedContest);
+            return contests;
+        }
     }
 }
