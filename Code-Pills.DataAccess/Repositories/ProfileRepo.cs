@@ -23,13 +23,33 @@ namespace Code_Pills.DataAccess.Repositories
         {
             try
             {
-                await _dbContext.PersonalInformation.AddAsync(profile);
-                await _dbContext.SaveChangesAsync();
-                return "Profile Saved Successfully";
+                PersonalInfo? user=await _dbContext.PersonalInformation
+                                   .FirstOrDefaultAsync(user=>user.Id==profile.Id);
+
+                if (user!=null)
+                {
+                    user.Name = profile.Name;
+                    user.Skills = profile.Skills;
+                    user.About=profile.About;
+                    user.DOB = profile.DOB;
+                    user.Email = profile.Email;
+                    user.Profession = profile.Profession;
+                    user.Gender = profile.Gender;
+                    user.UserName = profile.UserName;
+                    await _dbContext.SaveChangesAsync();
+                    return "Profile Update Successfully";
+                }
+                else
+                {
+                    await _dbContext.PersonalInformation.AddAsync(profile);
+                    await _dbContext.SaveChangesAsync();
+                    return "Profile Saved Successfully";
+                }
+               
             }
             catch(Exception Ex)
             {
-                return "";
+                return Ex.Message;
             }
         }
         public async Task<PersonalInfo?> GetProfile(string userId)

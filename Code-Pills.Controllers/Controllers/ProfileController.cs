@@ -17,7 +17,18 @@ namespace Code_Pills.Controllers.Controllers
         [HttpPost("PersonalInfo")]
         public async Task<IActionResult> SaveProfile(ProfileDTO profile)
         {
-            return Ok(await _profileService.SaveProfile(profile));
+            try {
+                string msg = await _profileService.SaveProfile(profile);
+
+                return Ok(new
+                {
+                    message = msg
+                });
+            }
+            catch(Exception ex) {
+                return BadRequest(ex.Message);
+            }
+
         }
         [HttpGet("PersonalInfo")]
         public async Task<IActionResult> GetProfile(string userId)
