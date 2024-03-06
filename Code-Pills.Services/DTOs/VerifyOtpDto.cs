@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Code_Pills.Services.DTOs
 {
-    public class RegisterRequestDto
+    public class VerifyOtpDto
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public int Otp { get; set; }
+        public string Email { get; set;}
     }
 }

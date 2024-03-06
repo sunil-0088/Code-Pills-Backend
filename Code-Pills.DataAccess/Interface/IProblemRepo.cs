@@ -1,4 +1,5 @@
 ﻿using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Code_Pills.DataAccess.Interface
         Task<string> SaveQuestion(Question problem);
         Task<string> SaveUserAttempt(UserQuestionMapping attempt);
         Task<string> EditUserAttempt(UserQuestionMapping attempt);
+        Task<IEnumerable<SearchQuestions>> SearchQuestions(string title);
     }
 }

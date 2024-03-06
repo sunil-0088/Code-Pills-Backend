@@ -1,6 +1,7 @@
 ﻿using Code_Pills.DataAccess.Context;
 using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
+using Code_Pills.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -103,6 +104,19 @@ namespace Code_Pills.DataAccess.Repositories
             {
                 return "";
             }
+        }
+        public async Task<IEnumerable<SearchQuestions>> SearchQuestions(string title)
+        {
+            title = title.ToLower();
+            IEnumerable<SearchQuestions> matchingSearches = await _dbContext.Questions
+                    .Where(q => q.Title.ToLower().Contains(title))
+                    .Select(q => new SearchQuestions { Id = q.Id, Title = q.Title, Difficulty = q.Difficulty })
+                    .ToListAsync();
+            if(matchingSearches == null)
+            {
+                return null;
+            }
+            return matchingSearches;
         }
     }
 }

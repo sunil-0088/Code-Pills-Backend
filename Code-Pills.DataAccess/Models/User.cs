@@ -10,4 +10,9 @@ namespace Code_Pills.DataAccess.Models
     public class User :IdentityUser
     {
     }
+    public class OtpDto
+    {
+        public int Otp { get; set; }
+        public string Email { get; set; }
+    }
 }

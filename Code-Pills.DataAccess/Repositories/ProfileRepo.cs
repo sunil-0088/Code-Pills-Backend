@@ -32,6 +32,10 @@ namespace Code_Pills.DataAccess.Repositories
                 return "";
             }
         }
+        public async Task<PersonalInfo?> GetProfile(string userId)
+        {
+            return await _dbContext.PersonalInformation.FirstOrDefaultAsync(user => user.Id == userId);
+        }
         public async Task<string> SavePerformance(PerformanceMapping performance)
         {
             try
@@ -59,5 +63,7 @@ namespace Code_Pills.DataAccess.Repositories
                 return "";
             }
         }
+
+       
     }
 }

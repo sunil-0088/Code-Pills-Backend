@@ -1,4 +1,5 @@
 ﻿
+using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,15 @@ namespace Code_Pills.Controllers.Controllers
         public async Task<IActionResult> EditUserAttempt(QuestionAttemptDTO question)
         {
             return Ok(await _problemService.EditUserAttempt(question));
+        }
+        [HttpGet("SearchQuestions")]
+        public async Task<IActionResult> SearchQuestions(string title)
+        {
+            if(title == null)
+            {
+                return Ok();
+            }
+            return Ok(await  _problemService.SearchQuestions(title));
         }
     }
 }

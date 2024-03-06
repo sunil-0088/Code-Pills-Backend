@@ -1,4 +1,5 @@
 ﻿using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace Code_Pills.Services.Interface
         Task<string> SaveQuestion(QuestionDTO problem);
         Task<string> SaveUserAttempt(QuestionAttemptDTO attempt);
         Task<string> EditUserAttempt(QuestionAttemptDTO attempt);
+        Task<IEnumerable<SearchQuestions>> SearchQuestions(string title);
     }
 }

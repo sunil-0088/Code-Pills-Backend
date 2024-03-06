@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
+using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,10 @@ namespace Code_Pills.Services.Services
         {
             UserQuestionMapping newAttempt = _mapper.Map<UserQuestionMapping>(attempt);
             return await _problemRepo.EditUserAttempt(newAttempt);
+        }
+        public async Task<IEnumerable<SearchQuestions>> SearchQuestions(string title)
+        {
+            return await _problemRepo.SearchQuestions(title);
         }
     }
 }

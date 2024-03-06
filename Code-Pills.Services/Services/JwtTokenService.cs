@@ -24,7 +24,8 @@ namespace Code_Pills.Services.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("UserId", user.Id)
             };
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 

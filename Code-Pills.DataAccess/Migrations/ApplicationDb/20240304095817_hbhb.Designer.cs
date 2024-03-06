@@ -4,6 +4,7 @@ using Code_Pills.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240304095817_hbhb")]
+    partial class hbhb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,9 +84,8 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Property<Guid>("ContestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -103,28 +105,21 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Property<Guid>("ContestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalPoints")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("PersonalInfoId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TimeTaken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContestId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PersonalInfoId");
 
                     b.ToTable("ContestUserMappings");
                 });
@@ -135,28 +130,33 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Attempts")
-                        .HasColumnType("int");
+                    b.Property<string>("Attempts")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CreditsLeft")
-                        .HasColumnType("int");
+                    b.Property<string>("CreditsLeft")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
-
-                    b.Property<int>("Solved")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalCredits")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("PersonalInfoId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Rating")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Solved")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalCredits")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("PersonalInfoId")
                         .IsUnique();
 
                     b.ToTable("PerformanceMappings");
@@ -170,19 +170,17 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Property<string>("About")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DOB")
+                    b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Profession")
                         .HasColumnType("nvarchar(max)");
@@ -191,27 +189,25 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("PersonalInformation");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Question", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Attempts")
                         .HasColumnType("int");
 
-                    b.Property<int>("Credits")
-                        .HasColumnType("int");
+                    b.Property<string>("Credits")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Difficulty")
                         .IsRequired()
@@ -241,9 +237,8 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("TagId")
                         .HasColumnType("int");
@@ -321,23 +316,21 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Property<bool>("IsSolved")
                         .HasColumnType("bit");
 
-                    b.Property<string>("QuestionId")
+                    b.Property<string>("PersonalInfoId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Solution")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("PersonalInfoId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("UserQuestionMappings");
                 });
@@ -345,15 +338,15 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.ContestQuestionMapping", b =>
                 {
                     b.HasOne("Code_Pills.DataAccess.EntityModels.Contest", "Contest")
-                        .WithMany("ContestQuestionMapping")
+                        .WithMany("ContestQuestionMappings")
                         .HasForeignKey("ContestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Code_Pills.DataAccess.EntityModels.Question", "Question")
-                        .WithMany("ContestQuestionMapping")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Contest");
@@ -364,15 +357,15 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.ContestUserMapping", b =>
                 {
                     b.HasOne("Code_Pills.DataAccess.EntityModels.Contest", "Contest")
-                        .WithMany("ContestUserMapping")
+                        .WithMany()
                         .HasForeignKey("ContestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Code_Pills.DataAccess.EntityModels.PersonalInfo", "PersonalInfo")
                         .WithMany("ContestUserMapping")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("PersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Contest");
@@ -384,7 +377,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 {
                     b.HasOne("Code_Pills.DataAccess.EntityModels.PersonalInfo", "PersonalInfo")
                         .WithOne("PerformanceMapping")
-                        .HasForeignKey("Code_Pills.DataAccess.EntityModels.PerformanceMapping", "UserId")
+                        .HasForeignKey("Code_Pills.DataAccess.EntityModels.PerformanceMapping", "PersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -412,15 +405,15 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.UserQuestionMapping", b =>
                 {
-                    b.HasOne("Code_Pills.DataAccess.EntityModels.Question", "Question")
+                    b.HasOne("Code_Pills.DataAccess.EntityModels.PersonalInfo", "PersonalInfo")
                         .WithMany("UserQuestionMapping")
-                        .HasForeignKey("QuestionId")
+                        .HasForeignKey("PersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Code_Pills.DataAccess.EntityModels.PersonalInfo", "PersonalInfo")
+                    b.HasOne("Code_Pills.DataAccess.EntityModels.Question", "Question")
                         .WithMany("UserQuestionMapping")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -431,9 +424,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Contest", b =>
                 {
-                    b.Navigation("ContestQuestionMapping");
-
-                    b.Navigation("ContestUserMapping");
+                    b.Navigation("ContestQuestionMappings");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.PersonalInfo", b =>
@@ -448,8 +439,6 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Question", b =>
                 {
-                    b.Navigation("ContestQuestionMapping");
-
                     b.Navigation("QuestionTagMapping");
 
                     b.Navigation("UserQuestionMapping");
