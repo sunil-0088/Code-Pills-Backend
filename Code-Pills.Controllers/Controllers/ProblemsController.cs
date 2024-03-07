@@ -18,7 +18,18 @@ namespace Code_Pills.Controllers.Controllers
         [HttpPost("Question")]
         public async Task<IActionResult> SaveQuestion(QuestionDTO question)
         {
-            return Ok(await _problemService.SaveQuestion(question));
+            try
+            {
+                var msg = await _problemService.SaveQuestion(question);
+                    return Ok( new
+                    {
+                        message = msg
+                    });
+
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         //[HttpPut("Question")]
         //public async Task<IActionResult> EditQuestion(QuestionDTO question)
