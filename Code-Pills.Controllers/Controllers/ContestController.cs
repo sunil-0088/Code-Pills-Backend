@@ -15,7 +15,7 @@ namespace Code_Pills.Controllers.Controllers
             _contestSerivce = contestSerivce;
         }
 
-        [HttpPost("Contest")]
+        [HttpPost("AddContest")]
         public async Task<IActionResult> SaveContest(ContestDTO contest)
         {
             return Ok(await _contestSerivce.SaveContest(contest));
