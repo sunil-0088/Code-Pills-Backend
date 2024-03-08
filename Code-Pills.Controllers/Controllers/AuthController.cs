@@ -30,11 +30,12 @@ namespace Code_Pills.Controllers.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             bool isRegister = true;
-            
+            var email = request.Email?.Trim();
+            var uniqueUserName = await _userService.GenerateUniqueUserName(email!);
             // Create Identity user
             var user = new IdentityUser
             {
-                UserName = request.Email?.Trim(),
+                UserName = uniqueUserName,
                 Email = request.Email?.Trim(),
             };
             var identityResult = await userManager.CreateAsync(user, request.Password);

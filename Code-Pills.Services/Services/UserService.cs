@@ -118,5 +118,40 @@ namespace Code_Pills.Services.Services
         {
             return await authRepo.AddPersonalInformation(userId, email);
         }
+
+
+  
+
+        // To generate unique user name using email
+
+        public async Task<string>GenerateUniqueUserName(string email)
+        {
+            // Extract username from email (before @gmail.com)
+            var atIndex = email.IndexOf("@");
+            var username = atIndex != -1 ? email.Substring(0, atIndex) : email;
+
+            // Check if the username is already in use
+            var existingUser = await _userManager.FindByNameAsync(username);
+            if (existingUser == null)
+            {
+                // Username is unique, return it
+                return username;
+            }
+            else
+            {
+                // Append a unique suffix to the username until it becomes unique
+                var suffix = 1;
+                while (true)
+                {
+                    var uniqueUsername = $"{username}{suffix}";
+                    if (await _userManager.FindByNameAsync(uniqueUsername) == null)
+                    {
+                        return uniqueUsername;
+                    }
+                    suffix++;
+                }
+            }
+        }
+
     }
 }
