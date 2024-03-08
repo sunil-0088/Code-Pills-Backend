@@ -12,7 +12,7 @@ namespace Code_Pills.DataAccess.EntityModels
         [Key]
         public int Id { get; set; }
         public required string TagName { get; set; }
-        public required string Category { get; set; }
+        public required bool IsCompany { get; set; }
         public virtual ICollection<QuestionTagMapping> QuestionTagMapping { get; set; }
     }
 }

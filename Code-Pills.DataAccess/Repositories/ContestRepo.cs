@@ -107,7 +107,7 @@ namespace Code_Pills.DataAccess.Repositories
                 List<Contest> activeContests = new List<Contest>();
                 foreach (Contest contest in _dbContext.Contests)
                 {
-                    if (contest.StartTime < DateTime.Now && contest.StartTime.AddMinutes(20) <= DateTime.Now)
+                    if (contest.StartTime < DateTime.Now && contest.StartTime.AddMinutes(20) >= DateTime.Now)
                     {
                         activeContests.Add(contest);
                     }
