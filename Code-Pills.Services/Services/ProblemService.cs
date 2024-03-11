@@ -42,5 +42,33 @@ namespace Code_Pills.Services.Services
         {
             return await _problemRepo.SearchQuestions(title);
         }
+        public async Task<IEnumerable<QuestionDTO>> GetAttemptedQuestions()
+        {
+            string userId = "1234";
+            IEnumerable<QuestionDTO> attemptedQuestions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetAttemptedQuestions(userId));
+            return attemptedQuestions;
+        }
+        public async Task<IEnumerable<QuestionDTO>> GetSolvedQuestions()
+        {
+            string userId = "1234";
+            IEnumerable<QuestionDTO> solvedQuestions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetSolvedQuestions(userId));
+            return solvedQuestions;
+        }
+        public async Task<IEnumerable<QuestionDTO>> GetIncompleteQuestions()
+        {
+            string userId = "1234";
+            IEnumerable<QuestionDTO> incompleteQuestions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetIncompleteQuestions(userId));
+            return incompleteQuestions;
+        }
+        public async Task<IEnumerable<QuestionDTO>> GetQuestionsByTags(List<int> Tags)
+        {
+            IEnumerable<QuestionDTO> questions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetQuestionsByTags(Tags));
+            return questions;
+        }
+        public async Task<QuestionDTO> GetQuestionsById(string questionId)
+        {
+            QuestionDTO question = _mapper.Map<QuestionDTO>(await _problemRepo.GetQuestionsById(questionId));
+            return question;
+        }
     }
 }

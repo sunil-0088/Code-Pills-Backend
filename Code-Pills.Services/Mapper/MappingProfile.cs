@@ -14,6 +14,7 @@ namespace Code_Pills.Services.Mapper
         public MappingProfile() {
             CreateMap<ContestDTO, Contest>();
             CreateMap<Contest, ContestDTO>();
+            CreateMap<Question, QuestionDTO>();
             CreateMap<ProfileDTO, PersonalInfo>();
             CreateMap<PersonalInfo, ProfileDTO>();
             CreateMap<PerformanceDTO, PerformanceMapping>()

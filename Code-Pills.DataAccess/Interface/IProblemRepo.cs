@@ -14,5 +14,10 @@ namespace Code_Pills.DataAccess.Interface
         Task<string> SaveUserAttempt(UserQuestionMapping attempt);
         Task<string> EditUserAttempt(UserQuestionMapping attempt);
         Task<IEnumerable<SearchQuestions>> SearchQuestions(string title);
+        Task<IEnumerable<Question>> GetAttemptedQuestions(string userId);
+        Task<IEnumerable<Question>> GetSolvedQuestions(string userId);
+        Task<IEnumerable<Question>> GetIncompleteQuestions(string userId);
+        Task<IEnumerable<Question>> GetQuestionsByTags(List<int> Tags);
+        Task<Question> GetQuestionsById(string questionId);
     }
 }

@@ -18,5 +18,6 @@ namespace Code_Pills.Services.DTOs
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Attendees { get; set; }
+        public string status { get; set; }
     }
 }

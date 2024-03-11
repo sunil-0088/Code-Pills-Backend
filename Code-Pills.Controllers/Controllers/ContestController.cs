@@ -22,9 +22,9 @@ namespace Code_Pills.Controllers.Controllers
         }
 
         [HttpPost("AddToContest")]
-        public async Task<IActionResult> SaveParticipation(ContestApplicantDTO applicant)
+        public async Task<IActionResult> SaveParticipation(Guid contestId)
         {
-            return Ok(await _contestSerivce.SaveParticipation(applicant));
+            return Ok(await _contestSerivce.SaveParticipation(contestId));
         }
 
         [HttpPut("ContestResult")]
@@ -55,6 +55,11 @@ namespace Code_Pills.Controllers.Controllers
         public async Task<IActionResult> GetCompletedContests(string userId)
         {
             return Ok(await _contestSerivce.GetCompletedContests(userId));
+        }
+        [HttpGet("ContestById")]
+        public async Task<IActionResult> GetContestById(Guid contestId)
+        {
+            return Ok(await _contestSerivce.GetContestById(contestId));
         }
 
     }
