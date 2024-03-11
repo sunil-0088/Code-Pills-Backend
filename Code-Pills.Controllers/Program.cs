@@ -22,6 +22,9 @@ builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 builder.Services.AddScoped<IMasterRepo,MasterRepo>();
 builder.Services.AddScoped<IMasterService, MasterService>();
 builder.Services.AddScoped<IJwtToken, JwtTokenService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Code_Pills.Services.Mapper.MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
@@ -70,9 +73,6 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         });
 });
-builder.Services.AddScoped<IJwtToken,JwtTokenService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

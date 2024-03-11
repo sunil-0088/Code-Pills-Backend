@@ -1,6 +1,7 @@
 ﻿using Code_Pills.DataAccess.Context;
 using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
+using Code_Pills.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,116 @@ namespace Code_Pills.DataAccess.Repositories
             catch (Exception ex)
             {
                 return "";
+            }
+        }
+        public async Task<IEnumerable<SearchQuestions>> SearchQuestions(string title)
+        {
+            try
+            {
+                title = title.ToLower();
+                IEnumerable<SearchQuestions> matchingSearches = await _dbContext.Questions
+                        .Where(q => q.Title.ToLower().Contains(title))
+                        .Select(q => new SearchQuestions { Id = q.Id, Title = q.Title, Difficulty = q.Difficulty })
+                        .ToListAsync();
+                if (matchingSearches == null)
+                {
+                    return null;
+                }
+                return matchingSearches;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<Question>> GetAttemptedQuestions(string userId)
+        {
+            try
+            {
+                IEnumerable<Question> attemptedQuestions = await (
+                        from question in _dbContext.Questions
+                        join mapping in _dbContext.UserQuestionMappings
+                        on question.Id equals mapping.QuestionId
+                        where mapping.UserId == userId
+                        select question
+                    ).ToListAsync();
+                return attemptedQuestions;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Question>> GetSolvedQuestions(string userId)
+        {
+            try
+            {
+                IEnumerable<Question> solvedQuestions = await (
+                        from question in _dbContext.Questions
+                        join mapping in _dbContext.UserQuestionMappings
+                        on question.Id equals mapping.QuestionId
+                        where mapping.UserId == userId && mapping.IsSolved == true
+                        select question
+                    ).ToListAsync();
+                return solvedQuestions;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Question>> GetIncompleteQuestions(string userId)
+        {
+            try
+            {
+                IEnumerable<Question> incompleteQuestions = await (
+                        from question in _dbContext.Questions
+                        join mapping in _dbContext.UserQuestionMappings
+                        on question.Id equals mapping.QuestionId
+                        where mapping.UserId == userId && mapping.IsSolved == false
+                        select question
+                    ).ToListAsync();
+                return incompleteQuestions;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Question>> GetQuestionsByTags(List<int> Tags)
+        {
+            try
+            {
+                IEnumerable<Question> Questions = await (
+                        from question in _dbContext.Questions
+                        join tags in _dbContext.QuestionTagMappings
+                        on question.Id equals tags.QuestionId
+                        where Tags.Contains(tags.TagId)
+                        select question
+                    ).Distinct().ToListAsync();
+                return Questions;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<Question> GetQuestionsById(string questionId)
+        {
+            try
+            {
+                Question? question = await _dbContext.Questions
+                    .Where(q => q.Id == questionId).FirstOrDefaultAsync();
+                if(question == null)
+                {
+                    return null;
+                }
+                return question;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
     }

@@ -11,10 +11,12 @@ namespace Code_Pills.Services.Interface
     public interface IContestService
     {
         Task<string> SaveContest(ContestDTO contest);
-        Task<string> SaveParticipation(ContestApplicantDTO applicant);
+        Task<string> SaveParticipation(Guid contestId);
         Task<string> SaveContestResult(ContestDTO results);
         Task<IEnumerable<ContestDTO>> GetUpcomingContests();
         Task<IEnumerable<ContestDTO>> GetRegisteredContests(string Id);
         Task<IEnumerable<ContestDTO>> GetActiveContests();
+        Task<IEnumerable<ContestDTO>> GetCompletedContests(string Id);
+        Task<ContestDTO> GetContestById(Guid contestId);
     }
 }

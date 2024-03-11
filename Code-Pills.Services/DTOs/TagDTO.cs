@@ -11,6 +11,6 @@ namespace Code_Pills.Services.DTOs
     {
         public required int Id { get; set; }
         public required string TagName { get; set; }
-        public required string IsCompany { get; set; }
+        public required bool IsCompany { get; set; }
     }
 }

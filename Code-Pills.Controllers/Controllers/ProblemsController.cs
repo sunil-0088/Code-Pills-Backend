@@ -1,4 +1,5 @@
 ﻿
+using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,40 @@ namespace Code_Pills.Controllers.Controllers
         public async Task<IActionResult> EditUserAttempt(QuestionAttemptDTO question)
         {
             return Ok(await _problemService.EditUserAttempt(question));
+        }
+        [HttpGet("SearchQuestions")]
+        public async Task<IActionResult> SearchQuestions(string title)
+        {
+            if(title == null)
+            {
+                return Ok();
+            }
+            return Ok(await  _problemService.SearchQuestions(title));
+        }
+        [HttpGet("AttemptedQuestions")]
+        public async Task<IActionResult> GetAttemptedQuestions()
+        {
+            return Ok(await _problemService.GetAttemptedQuestions());
+        }
+        [HttpGet("SolvedQuestions")]
+        public async Task<IActionResult> GetSolvedQuestions()
+        {
+            return Ok(await _problemService.GetSolvedQuestions());
+        }
+        [HttpGet("IncompleteQuestions")]
+        public async Task<IActionResult> GetIncompleteQuestions()
+        {
+            return Ok(await _problemService.GetIncompleteQuestions());
+        }
+        [HttpGet("QuestionsByTags")]
+        public async Task<IActionResult> GetQuestionsByTags([FromQuery] List<int> Tags)
+        {
+            return Ok(await _problemService.GetQuestionsByTags(Tags));
+        }
+        [HttpGet("QuestionsById")]
+        public async Task<IActionResult> GetQuestionsById(string questionId)
+        {
+            return Ok(await _problemService.GetQuestionsById(questionId));
         }
     }
 }

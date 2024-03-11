@@ -1,4 +1,5 @@
-﻿using Code_Pills.Services.DTOs;
+﻿using Code_Pills.DataAccess.Models;
+using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,16 +15,16 @@ namespace Code_Pills.Controllers.Controllers
             _contestSerivce = contestSerivce;
         }
 
-        [HttpPost("Contest")]
+        [HttpPost("AddContest")]
         public async Task<IActionResult> SaveContest(ContestDTO contest)
         {
             return Ok(await _contestSerivce.SaveContest(contest));
         }
 
         [HttpPost("AddToContest")]
-        public async Task<IActionResult> SaveParticipation(ContestApplicantDTO applicant)
+        public async Task<IActionResult> SaveParticipation(Guid contestId)
         {
-            return Ok(await _contestSerivce.SaveParticipation(applicant));
+            return Ok(await _contestSerivce.SaveParticipation(contestId));
         }
 
         [HttpPut("ContestResult")]
@@ -45,9 +46,20 @@ namespace Code_Pills.Controllers.Controllers
         }
 
         [HttpGet("ActiveContests")]
-        public async Task<IActionResult> GetActiveContesst()
+        public async Task<IActionResult> GetActiveContests()
         {
             return Ok(await _contestSerivce.GetActiveContests());
+        }
+
+        [HttpGet("CompletedContests")]
+        public async Task<IActionResult> GetCompletedContests(string userId)
+        {
+            return Ok(await _contestSerivce.GetCompletedContests(userId));
+        }
+        [HttpGet("ContestById")]
+        public async Task<IActionResult> GetContestById(Guid contestId)
+        {
+            return Ok(await _contestSerivce.GetContestById(contestId));
         }
 
     }

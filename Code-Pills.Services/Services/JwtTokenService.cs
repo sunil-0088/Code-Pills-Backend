@@ -1,4 +1,5 @@
 ﻿using Code_Pills.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,10 +16,14 @@ namespace Code_Pills.Services.Services
     public class JwtTokenService : IJwtToken
     {
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public JwtTokenService(IConfiguration configuration)
+
+        public JwtTokenService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
-            this.configuration = configuration;
+            this.configuration = configuration; 
+            _httpContextAccessor = httpContextAccessor;
+
         }
         public string CreateToken(IdentityUser user, List<string> roles)
         {
@@ -38,6 +43,10 @@ namespace Code_Pills.Services.Services
                 expires: DateTime.Now.AddDays(7),
                 signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public string GetUserId()
+        {
+            return _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
         }
     }
 }

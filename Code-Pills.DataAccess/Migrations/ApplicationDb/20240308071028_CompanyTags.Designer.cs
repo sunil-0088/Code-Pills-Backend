@@ -4,6 +4,7 @@ using Code_Pills.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308071028_CompanyTags")]
+    partial class CompanyTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,23 +130,6 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.HasIndex("UserId");
 
                     b.ToTable("ContestUserMappings");
-                });
-
-            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Language", b =>
-                {
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Value");
-
-                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.PerformanceMapping", b =>
