@@ -1,6 +1,10 @@
 ﻿using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Code_Pills.Controllers.Controllers
 {
@@ -9,9 +13,14 @@ namespace Code_Pills.Controllers.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly IProfileService _profileService;
-        public ProfileController(IProfileService profileService) 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ProfileController(IProfileService profileService,IHttpContextAccessor httpContextAccessor) 
         {
             _profileService = profileService;
+            _httpContextAccessor = httpContextAccessor;
+            //Console.WriteLine(HttpContext.User.Identity.IsAuthenticated);
+           
         }
 
         [HttpPost("PersonalInfo")]
@@ -30,7 +39,9 @@ namespace Code_Pills.Controllers.Controllers
             }
 
         }
+       
         [HttpGet("PersonalInfo")]
+        [Authorize]
         public async Task<IActionResult> GetProfile(string userId)
         {
             try
@@ -62,5 +73,6 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _profileService.EditPerformance(performance));
         }
+
     }
 }
