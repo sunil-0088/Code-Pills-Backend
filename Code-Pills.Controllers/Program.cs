@@ -19,6 +19,8 @@ builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 builder.Services.AddScoped<IHomeRepo, HomeRepo>();
 builder.Services.AddScoped<IProblemRepo, ProblemRepo>();
 builder.Services.AddScoped<IAuthRepo, AuthRepo>();
+builder.Services.AddScoped<IMasterRepo,MasterRepo>();
+builder.Services.AddScoped<IMasterService, MasterService>();
 builder.Services.AddScoped<IJwtToken, JwtTokenService>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Code_Pills.Services.Mapper.MappingProfile));
