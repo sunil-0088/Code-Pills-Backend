@@ -15,7 +15,7 @@ namespace Code_Pills.Controllers.Controllers
         {
             _masterService = masterService;
         }
-        [HttpGet("getLanguages")]
+        [HttpGet("GetLanguages")]
         public async Task<IActionResult> getLanguages()
         {
             try
@@ -31,7 +31,7 @@ namespace Code_Pills.Controllers.Controllers
             }
         }
 
-        [HttpGet("getTags")]
+        [HttpGet("GetTags")]
         public async Task<IActionResult> getTags()
         {
             try
