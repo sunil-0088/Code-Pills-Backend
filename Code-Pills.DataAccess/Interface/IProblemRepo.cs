@@ -19,5 +19,6 @@ namespace Code_Pills.DataAccess.Interface
         Task<IEnumerable<Question>> GetIncompleteQuestions(string userId);
         Task<IEnumerable<Question>> GetQuestionsByTags(List<int> Tags);
         Task<Question> GetQuestionsById(string questionId);
+        Task<bool> QuestionTagMapping(List<int> tags, string questionId);
     }
 }
