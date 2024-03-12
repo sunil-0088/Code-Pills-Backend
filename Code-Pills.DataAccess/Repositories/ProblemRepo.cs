@@ -215,5 +215,27 @@ namespace Code_Pills.DataAccess.Repositories
                 return null;
             }
         }
+
+        public async Task<bool> QuestionTagMapping(List<int> tags,string questionId)
+        {
+            try
+            {
+                foreach (var tag in tags)
+                {
+                    QuestionTagMapping questionTagMap = new()
+                    {
+                        QuestionId = questionId,
+                        TagId = tag
+                    };
+                   await _dbContext.QuestionTagMappings.AddAsync(questionTagMap);
+                }
+                await _dbContext.SaveChangesAsync();
+                return true;
+
+            }catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

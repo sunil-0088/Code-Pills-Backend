@@ -21,5 +21,6 @@ namespace Code_Pills.Services.Interface
         Task<IEnumerable<QuestionDTO>> GetIncompleteQuestions();
         Task<IEnumerable<QuestionDTO>> GetQuestionsByTags(List<int> Tags);
         Task<QuestionDTO> GetQuestionsById(string questionId);
+        Task<bool> QuestionTagMapping(List<int> tags, string questionId);
     }
 }

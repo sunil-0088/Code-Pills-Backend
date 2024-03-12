@@ -22,6 +22,9 @@ namespace Code_Pills.DataAccess.Context
         public DbSet<ContestQuestionMapping> ContestQuestionMappings { get; set; }
         public DbSet<QuestionTagMapping> QuestionTagMappings { get; set; }
         public DbSet<UserQuestionMapping> UserQuestionMappings { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<UserOtp> UserOtp { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -34,6 +37,5 @@ namespace Code_Pills.DataAccess.Context
             modelBuilder.ApplyConfiguration(new QuestionTagConfig());
             modelBuilder.ApplyConfiguration(new UserQuestionConfig());
         }
-        public DbSet<UserOtp> UserOtp { get; set; }
     }
 }

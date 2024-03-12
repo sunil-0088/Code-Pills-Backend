@@ -75,5 +75,10 @@ namespace Code_Pills.Services.Services
             QuestionDTO question = _mapper.Map<QuestionDTO>(await _problemRepo.GetQuestionsById(questionId));
             return question;
         }
+
+        public Task<bool> QuestionTagMapping(List<int> tags, string questionId)
+        {
+           return _problemRepo.QuestionTagMapping(tags, questionId);
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace Code_Pills.Services.DTOs
         public int Likes { get; set; }
         public int Shares { get; set; }
         public int Attempts { get; set; }
+        public List<int> Tags { get; set; }
     }
 }

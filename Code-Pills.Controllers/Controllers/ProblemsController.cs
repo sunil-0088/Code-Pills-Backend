@@ -25,6 +25,12 @@ namespace Code_Pills.Controllers.Controllers
             try
             {
                 var msg = await _problemService.SaveQuestion(question);
+                 bool isMapped=await _problemService.QuestionTagMapping(question.Tags,question.Id);
+
+                if (!isMapped)
+                {
+                   return  BadRequest("Upable to map Question with Tags");
+                }
                     return Ok( new
                     {
                         message = msg
