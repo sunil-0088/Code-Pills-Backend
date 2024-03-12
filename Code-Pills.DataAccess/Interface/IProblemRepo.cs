@@ -20,5 +20,7 @@ namespace Code_Pills.DataAccess.Interface
         Task<IEnumerable<Question>> GetQuestionsByTags(List<int> Tags);
         Task<Question> GetQuestionsById(string questionId);
         Task<bool> QuestionTagMapping(List<int> tags, string questionId);
+        Task<UserQuestionMapping?> GetQuestionStatus(string userId, string questionId);
+        Task<List<int>> GetQuestionTags(string questionId);
     }
 }

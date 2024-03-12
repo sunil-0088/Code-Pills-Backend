@@ -237,5 +237,39 @@ namespace Code_Pills.DataAccess.Repositories
                 return false;
             }
         }
+
+        public async Task<UserQuestionMapping?> GetQuestionStatus(string userId, string questionId)
+        {
+            try
+            {
+                UserQuestionMapping? userQuestionMapping = await _dbContext.UserQuestionMappings
+                    .Where(map => map.QuestionId == questionId && map.UserId == userId)
+                    .FirstOrDefaultAsync();
+
+                return userQuestionMapping;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<int>> GetQuestionTags(string questionId)
+        {
+            try
+            {
+                List<int> tags = await _dbContext.QuestionTagMappings
+                    .Where(map => map.QuestionId == questionId)
+                    .Select(map => map.TagId)
+                    .ToListAsync();
+
+                return tags;
+
+            }
+            catch (Exception) {
+
+                return new List<int>();
+            }
+        }
     }
 }

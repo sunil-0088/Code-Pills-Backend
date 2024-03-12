@@ -3,6 +3,6 @@ namespace Code_Pills.DataAccess.Interface
 {
     public interface IAuthRepo
     {
-        Task<bool> AddPersonalInformation(string userId, string email);
+        Task<bool> AddPersonalInformation(string userId, string email,string username);
     }
 }

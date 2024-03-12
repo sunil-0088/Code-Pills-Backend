@@ -16,5 +16,10 @@ namespace Code_Pills.DataAccess.EntityModels
         public virtual Tag Tag { get; set;}
         public string QuestionId { get; set; }
         public virtual Question Question { get; set;}
+
+        public static implicit operator List<object>(QuestionTagMapping? v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

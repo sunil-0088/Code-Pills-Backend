@@ -73,6 +73,10 @@ namespace Code_Pills.Services.Services
         public async Task<QuestionDTO> GetQuestionsById(string questionId)
         {
             QuestionDTO question = _mapper.Map<QuestionDTO>(await _problemRepo.GetQuestionsById(questionId));
+
+            List<int> tags = await _problemRepo.GetQuestionTags(questionId);
+            question.Tags = tags;
+
             return question;
         }
 
