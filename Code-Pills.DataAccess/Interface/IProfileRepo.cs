@@ -13,5 +13,6 @@ namespace Code_Pills.DataAccess.Interface
         Task<PersonalInfo?> GetProfile(string userId);
         Task<string> SavePerformance(PerformanceMapping performance);
         Task<string> EditPerformance(PerformanceMapping performance);
+        Task<bool> IsUserNameUnique(string userName);
     }
 }

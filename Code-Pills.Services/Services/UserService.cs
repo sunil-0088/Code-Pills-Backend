@@ -116,7 +116,8 @@ namespace Code_Pills.Services.Services
 
         public async Task<bool> AddPersonalInformation(string userId, string email)
         {
-            return await authRepo.AddPersonalInformation(userId, email);
+            var uniqueUsername =await GenerateUniqueUserName(email);
+            return await authRepo.AddPersonalInformation(userId, uniqueUsername);
         }
 
 
