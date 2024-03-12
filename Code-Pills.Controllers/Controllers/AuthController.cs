@@ -106,9 +106,16 @@ namespace Code_Pills.Controllers.Controllers
                     };
                     return Ok(response);
                 }
+                else
+                {
+                    return BadRequest("Email or password is incorrect");
+                }
             }
-            ModelState.AddModelError("", "Email or password is incorrect");
-            return ValidationProblem(ModelState);
+            else
+            {
+                return StatusCode(404, "User is not found");
+            }
+            
         }
 
         // Handling Google signing

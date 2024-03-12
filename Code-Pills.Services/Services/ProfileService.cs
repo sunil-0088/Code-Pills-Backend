@@ -44,5 +44,10 @@ namespace Code_Pills.Services.Services
             return await _profileRepo.EditPerformance(userPerformance);
         }
 
+        public async Task<bool> IsUserNameTaken(string userName)
+        {
+            return await _profileRepo.IsUserNameUnique(userName);
+        }
+
     }
 }

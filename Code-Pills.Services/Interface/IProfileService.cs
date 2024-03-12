@@ -9,5 +9,6 @@ namespace Code_Pills.Services.Interface
         Task<ProfileDTO?> GetProfile(string userId);
         Task<string> SavePerformance(PerformanceDTO performance);
         Task<string> EditPerformance(PerformanceDTO performance);
+        Task<bool> IsUserNameTaken(string userName);
     }
 }

@@ -74,5 +74,15 @@ namespace Code_Pills.Controllers.Controllers
             return Ok(await _profileService.EditPerformance(performance));
         }
 
+        // Check for unique userName
+
+        [HttpGet("check-username")]
+        public async Task<IActionResult> CheckUsername(string username)
+        {
+            // Check if the username is taken in your database or any other storage
+            bool isTaken =await _profileService.IsUserNameTaken(username);
+            return Ok(isTaken);
+        }
+
     }
 }

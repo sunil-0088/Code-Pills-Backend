@@ -1,10 +1,12 @@
 ﻿using Code_Pills.DataAccess.Context;
 using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -14,10 +16,12 @@ namespace Code_Pills.DataAccess.Repositories
     public class ProfileRepo: IProfileRepo
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ProfileRepo(ApplicationDbContext dbContext)
+        public ProfileRepo(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> SaveProfile(PersonalInfo profile)
         {
@@ -84,6 +88,22 @@ namespace Code_Pills.DataAccess.Repositories
             }
         }
 
-       
+        public async Task<bool> IsUserNameUnique(string userName)
+        {
+            var userIdClaim = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim != null)
+            {
+                bool isTaken = await _dbContext.PersonalInformation.AnyAsync(user => user.UserName == userName && user.Id != userIdClaim.ToString());
+                return isTaken;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+
+
     }
 }

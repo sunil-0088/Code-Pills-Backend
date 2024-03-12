@@ -25,7 +25,7 @@ namespace Code_Pills.Services.Services
             var claims = new List<Claim>
     {
         new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.NameIdentifier, user.Id) // Change "UserId" to ClaimTypes.NameIdentifier
+        new Claim("UserId", user.Id) // Change "UserId" to ClaimTypes.NameIdentifier
     };
 
             // Add roles as claims
@@ -38,7 +38,7 @@ namespace Code_Pills.Services.Services
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(7), // Use UtcNow for consistency
+                expires: DateTime.UtcNow.AddMinutes(1), // Use UtcNow for consistency
                 signingCredentials: credentials);
 
             // Return the JWT token as a string
