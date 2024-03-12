@@ -19,12 +19,13 @@ namespace Code_Pills.DataAccess.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<string> SaveContest(Contest contest)
+        public async Task<string> SaveContest(Contest contest, List<string> questions)
         {
             try
             {
                 await _dbContext.Contests.AddAsync(contest);
                 await _dbContext.SaveChangesAsync();
+                await SaveContestQuestions(questions, contest.Id);
                 return "Contest Created Successfully";
             }
             catch(Exception ex)
@@ -32,10 +33,33 @@ namespace Code_Pills.DataAccess.Repositories
                 return ""; 
             }
         }
+
+        public async Task<bool> SaveContestQuestions(List<string> questions, Guid contestId)
+        {
+            try
+            {
+                foreach (string question in questions)
+                {
+                    await  _dbContext.ContestQuestionMappings.AddAsync(new ContestQuestionMapping
+                    {
+                        ContestId = contestId,
+                        QuestionId = question,
+                    });
+                    await _dbContext.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<string> SaveParticipation(Guid contestId, string userId)
         {
             try
             {
+                Contest contest = await _dbContext.Contests.Where(c => c.Id == contestId).FirstOrDefaultAsync();
+                contest.Attendees += 1;
                 await _dbContext.ContestUserMappings.AddAsync(
                     new ContestUserMapping
                     {

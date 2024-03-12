@@ -16,20 +16,24 @@ namespace Code_Pills.Services.Services
     {
         private readonly IProfileRepo _profileRepo;
         private readonly IMapper _mapper;
+        private readonly IJwtToken _tokenService;
 
-        public ProfileService(IProfileRepo profileRepo, IMapper mapper)
+        public ProfileService(IProfileRepo profileRepo, IMapper mapper, IJwtToken tokenService)
         {
             _profileRepo = profileRepo;
             _mapper = mapper;
+            _tokenService = tokenService;
+            _tokenService = tokenService;
         }
         public async Task<string> SaveProfile(ProfileDTO profile)
         {
             PersonalInfo newProfile = _mapper.Map<PersonalInfo>(profile);
             return await _profileRepo.SaveProfile(newProfile);
         }
-        public async Task<ProfileDTO?> GetProfile(string userId)
-        { 
-            PersonalInfo personalInfo=await _profileRepo.GetProfile(userId);
+        public async Task<ProfileDTO?> GetProfile()
+        {
+            string userId = _tokenService.GetUserId();
+            PersonalInfo personalInfo= await _profileRepo.GetProfile(userId);
             ProfileDTO userInfo = _mapper.Map < ProfileDTO >(personalInfo);
             return userInfo;
         }

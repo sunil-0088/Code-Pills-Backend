@@ -17,11 +17,12 @@ namespace Code_Pills.Services.Services
     {
         private readonly IProblemRepo _problemRepo;
         private readonly IMapper _mapper;
-
-        public ProblemService(IProblemRepo problemRepo, IMapper mapper)
+        private readonly IJwtToken _tokenService;
+        public ProblemService(IProblemRepo problemRepo, IMapper mapper,IJwtToken tokenService)
         {
             _problemRepo = problemRepo;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
         public async Task<string> SaveQuestion(QuestionDTO problem)
         {
@@ -40,23 +41,27 @@ namespace Code_Pills.Services.Services
         }
         public async Task<IEnumerable<SearchQuestions>> SearchQuestions(string title)
         {
+            if(title == "")
+            {
+                return new List<SearchQuestions>();
+            }
             return await _problemRepo.SearchQuestions(title);
         }
         public async Task<IEnumerable<QuestionDTO>> GetAttemptedQuestions()
         {
-            string userId = "1234";
+            string userId = _tokenService.GetUserId();
             IEnumerable<QuestionDTO> attemptedQuestions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetAttemptedQuestions(userId));
             return attemptedQuestions;
         }
         public async Task<IEnumerable<QuestionDTO>> GetSolvedQuestions()
         {
-            string userId = "1234";
+            string userId = _tokenService.GetUserId();
             IEnumerable<QuestionDTO> solvedQuestions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetSolvedQuestions(userId));
             return solvedQuestions;
         }
         public async Task<IEnumerable<QuestionDTO>> GetIncompleteQuestions()
         {
-            string userId = "1234";
+            string userId = _tokenService.GetUserId();
             IEnumerable<QuestionDTO> incompleteQuestions = _mapper.Map<IEnumerable<QuestionDTO>>(await _problemRepo.GetIncompleteQuestions(userId));
             return incompleteQuestions;
         }

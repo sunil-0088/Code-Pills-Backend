@@ -17,5 +17,6 @@ namespace Code_Pills.Services.Interface
         Task<Object> VerifyEmailAsync(string userId, string token);
         Task<bool> MarkEmailConfirm(IdentityUser user);
         Task<LoginResponseDto> VerifyOtp(VerifyOtpDto req);
+        Task<string> GenerateUniqueUserName(string email);
     }
 }

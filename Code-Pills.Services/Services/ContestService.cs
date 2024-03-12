@@ -17,22 +17,22 @@ namespace Code_Pills.Services.Services
     {
         private readonly IContestRepo _contestRepo;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public ContestService(IContestRepo contestRepo, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IJwtToken _tokenService;
+        public ContestService(IContestRepo contestRepo, IMapper mapper, IJwtToken tokenService)
         {
             _contestRepo = contestRepo;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
+            _tokenService = tokenService;
         }
         public async Task<string> SaveContest(ContestDTO contest)
         {
+            List<string> questions = contest.Questions.ToList();
             Contest newContest = _mapper.Map<Contest>(contest);
-            return await _contestRepo.SaveContest(newContest);
+            return await _contestRepo.SaveContest(newContest, questions);
         }
         public async Task<string> SaveParticipation(Guid contestId)
         {
-             string userId = "1234"; 
-            //string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+             string userId = _tokenService.GetUserId(); 
             return await _contestRepo.SaveParticipation(contestId, userId);
 
         }
@@ -43,7 +43,7 @@ namespace Code_Pills.Services.Services
         }
         public async Task<IEnumerable<ContestDTO>> GetUpcomingContests()
         {
-            string userId = "1234";
+            string userId = _tokenService.GetUserId();
             IEnumerable<Contest> activeContest = await _contestRepo.GetUpcomingContests(userId);
             IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(activeContest);
             foreach (ContestDTO contest in contests)
@@ -52,9 +52,10 @@ namespace Code_Pills.Services.Services
             }
             return contests;
         }
-        public async Task<IEnumerable<ContestDTO>> GetRegisteredContests(string Id)
+        public async Task<IEnumerable<ContestDTO>> GetRegisteredContests()
         {
-            IEnumerable<Contest> registeredContest = await _contestRepo.GetRegisteredContests(Id);
+            string userId = _tokenService.GetUserId();
+            IEnumerable<Contest> registeredContest = await _contestRepo.GetRegisteredContests(userId);
             IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(registeredContest);
             foreach(ContestDTO contest in contests)
             {
@@ -72,9 +73,10 @@ namespace Code_Pills.Services.Services
             }
             return contests;
         }
-        public async Task<IEnumerable<ContestDTO>> GetCompletedContests(string Id)
+        public async Task<IEnumerable<ContestDTO>> GetCompletedContests()
         {
-            IEnumerable<Contest> completedContest = await _contestRepo.GetCompletedContests(Id);
+            string userId = _tokenService.GetUserId();
+            IEnumerable<Contest> completedContest = await _contestRepo.GetCompletedContests(userId);
             IEnumerable<ContestDTO> contests = _mapper.Map<IEnumerable<ContestDTO>>(completedContest);
             foreach (ContestDTO contest in contests)
             {

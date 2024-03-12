@@ -10,5 +10,6 @@ namespace Code_Pills.Services.Interface
     public interface IJwtToken
     {
         string CreateToken(IdentityUser user, List<string> roles);
+        string GetUserId();
     }
 }

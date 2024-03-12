@@ -11,9 +11,13 @@ namespace Code_Pills.Controllers.Controllers
     public class ProblemsController: ControllerBase
     {
         private readonly IProblemService _problemService;
-        public ProblemsController(IProblemService problemService) 
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public ProblemsController(IProblemService problemService, IHttpContextAccessor httpContextAccessor) 
         { 
             _problemService = problemService;
+            this.httpContextAccessor = httpContextAccessor;
+            var userClaims = httpContextAccessor.HttpContext?.User.Claims;
         }
         [HttpPost("Question")]
         public async Task<IActionResult> SaveQuestion(QuestionDTO question)

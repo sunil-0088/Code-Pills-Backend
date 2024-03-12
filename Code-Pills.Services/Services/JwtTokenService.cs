@@ -28,20 +28,25 @@ namespace Code_Pills.Services.Services
         public string CreateToken(IdentityUser user, List<string> roles)
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("UserId", user.Id)
-            };
+    {
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim("UserId", user.Id) // Change "UserId" to ClaimTypes.NameIdentifier
+    };
+
+            // Add roles as claims
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(7),
+                expires: DateTime.UtcNow.AddDays(7), // Use UtcNow for consistency
                 signingCredentials: credentials);
+
+            // Return the JWT token as a string
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
         public string GetUserId()

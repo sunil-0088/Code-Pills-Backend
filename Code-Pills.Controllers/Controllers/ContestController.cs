@@ -40,9 +40,9 @@ namespace Code_Pills.Controllers.Controllers
         }
 
         [HttpGet("RegisteredContests")]
-        public async Task<IActionResult> GetRegisteredContests(string userId)
+        public async Task<IActionResult> GetRegisteredContests()
         {
-            return Ok(await _contestSerivce.GetRegisteredContests(userId));
+            return Ok(await _contestSerivce.GetRegisteredContests());
         }
 
         [HttpGet("ActiveContests")]
@@ -52,13 +52,14 @@ namespace Code_Pills.Controllers.Controllers
         }
 
         [HttpGet("CompletedContests")]
-        public async Task<IActionResult> GetCompletedContests(string userId)
+        public async Task<IActionResult> GetCompletedContests()
         {
-            return Ok(await _contestSerivce.GetCompletedContests(userId));
+            return Ok(await _contestSerivce.GetCompletedContests());
         }
         [HttpGet("ContestById")]
         public async Task<IActionResult> GetContestById(Guid contestId)
         {
+
             return Ok(await _contestSerivce.GetContestById(contestId));
         }
 
