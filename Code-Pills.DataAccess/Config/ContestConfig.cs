@@ -19,6 +19,8 @@ namespace Code_Pills.DataAccess.Config
             builder.Property(e => e.Difficulty).IsRequired();
             builder.Property(c => c.StartTime).IsRequired();
             builder.Property(c => c.EndTime).IsRequired();
+            builder.Property(c => c.IsWeekly).IsRequired();
+            builder.Property(c => c.IsMonthly).IsRequired();
         }
     }
 }

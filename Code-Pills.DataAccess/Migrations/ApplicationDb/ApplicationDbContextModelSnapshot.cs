@@ -42,6 +42,12 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsMonthly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWeekly")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Prize1")
                         .HasColumnType("nvarchar(max)");
 
@@ -131,17 +137,21 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Language", b =>
                 {
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("LanguageId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LanguageId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LanguageId");
 
                     b.ToTable("Languages");
                 });

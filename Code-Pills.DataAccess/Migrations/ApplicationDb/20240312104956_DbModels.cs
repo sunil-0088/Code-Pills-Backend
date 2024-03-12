@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 {
     /// <inheritdoc />
-    public partial class ModelConfigs : Migration
+    public partial class DbModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,7 +27,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     Attendees = table.Column<int>(type: "int", nullable: false),
                     Winner1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Winner2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Winner3 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Winner3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsWeekly = table.Column<bool>(type: "bit", nullable: false),
+                    IsMonthly = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,18 +37,32 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "Languages",
+                columns: table => new
+                {
+                    LanguageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Languages", x => x.LanguageId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersonalInformation",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    About = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Profession = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Skills = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Profession = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Skills = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,7 +75,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Credits = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Credits = table.Column<int>(type: "int", nullable: false),
                     Difficulty = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Submissions = table.Column<int>(type: "int", nullable: false),
                     Likes = table.Column<int>(type: "int", nullable: false),
@@ -91,11 +107,24 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TagName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    IsCompany = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserOtp",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Otp = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserOtp", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +135,7 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalPoints = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalPoints = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ContestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -132,11 +161,11 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TotalCredits = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreditsLeft = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rating = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Attempts = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Solved = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalCredits = table.Column<int>(type: "int", nullable: false),
+                    CreditsLeft = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<float>(type: "real", nullable: false),
+                    Attempts = table.Column<int>(type: "int", nullable: false),
+                    Solved = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -290,6 +319,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 name: "ContestUserMappings");
 
             migrationBuilder.DropTable(
+                name: "Languages");
+
+            migrationBuilder.DropTable(
                 name: "PerformanceMappings");
 
             migrationBuilder.DropTable(
@@ -297,6 +329,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             migrationBuilder.DropTable(
                 name: "Skills");
+
+            migrationBuilder.DropTable(
+                name: "UserOtp");
 
             migrationBuilder.DropTable(
                 name: "UserQuestionMappings");
