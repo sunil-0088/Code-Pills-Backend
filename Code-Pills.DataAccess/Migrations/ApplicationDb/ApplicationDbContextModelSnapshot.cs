@@ -137,21 +137,17 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Language", b =>
                 {
-                    b.Property<int>("LanguageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LanguageId"));
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LanguageId");
+                    b.HasKey("Name");
 
                     b.ToTable("Languages");
                 });
