@@ -20,5 +20,7 @@ namespace Code_Pills.Services.DTOs
         public DateTime EndTime { get; set; }
         public int Attendees { get; set; }
         public string? status { get; set; }
+        public bool IsWeekly { get; set; }
+        public bool IsMonthly { get; set;}
     }
 }
