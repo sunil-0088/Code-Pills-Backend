@@ -43,7 +43,7 @@ namespace Code_Pills.Services.Services
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(1), // Use UtcNow for consistency
+                expires: DateTime.UtcNow.AddDays(1), // Use UtcNow for consistency
                 signingCredentials: credentials);
 
             // Return the JWT token as a string
