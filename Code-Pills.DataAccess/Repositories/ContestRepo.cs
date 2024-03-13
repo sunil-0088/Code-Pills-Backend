@@ -26,7 +26,7 @@ namespace Code_Pills.DataAccess.Repositories
                 await _dbContext.Contests.AddAsync(contest);
                 await _dbContext.SaveChangesAsync();
                 await SaveContestQuestions(questions, contest.Id);
-                return "Contest Created Successfully";
+                return contest.Id.ToString();
             }
             catch(Exception ex)
             {

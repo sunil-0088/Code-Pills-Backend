@@ -237,5 +237,63 @@ namespace Code_Pills.DataAccess.Repositories
                 return false;
             }
         }
+
+        public async Task<string> PostFeature(Feature feature, List<string> questions)
+        {
+            try
+            {
+                await _dbContext.Featured.AddAsync(feature);
+                await _dbContext.SaveChangesAsync();
+                if(await PostFeatureQuestions(feature.Id, questions))
+                {
+                    return "Feature Posted Successfully";
+                }
+                else
+                {
+                    return "Error Posting Feature";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+        public async Task<bool> PostFeatureQuestions(Guid featureId, List<string> questions)
+        {
+            try
+            {
+                foreach(string question in questions)
+                {
+                    await _dbContext.FeaturedQuestionMappings.AddAsync(new FeatureQuestionMapping
+                    {
+                        FeatureId = featureId,
+                        QuestionId = question
+                    });
+                    await _dbContext.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<string> AddUserToFeature(Guid featureId, string userId)
+        {
+            try
+            {
+                await _dbContext.FeaturedUserMappings.AddAsync(new FeatureUserMapping
+                {
+                    FeatureId = featureId,
+                    UserId = userId
+                });
+                return "User Added Successfully";
+            }
+            catch(Exception ex)
+            {
+                return "";
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace Code_Pills.DataAccess.EntityModels
         public int Attempts { get; set; }
         public virtual ICollection<UserQuestionMapping> UserQuestionMapping { get; set; }
         public virtual ICollection<QuestionTagMapping> QuestionTagMapping { get; set; }
-        public virtual ICollection<ContestQuestionMapping> ContestQuestionMapping { get; set;}
+        public virtual ICollection<ContestQuestionMapping> ContestQuestionMapping { get; set; }
+        public virtual ICollection<FeatureQuestionMapping> FeaturedQuestionMapping { get; set; }
     }
 }

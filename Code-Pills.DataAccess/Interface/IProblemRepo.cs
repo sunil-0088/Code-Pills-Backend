@@ -1,4 +1,5 @@
 ﻿using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.DataAccess.Migrations.ApplicationDb;
 using Code_Pills.DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -20,5 +21,7 @@ namespace Code_Pills.DataAccess.Interface
         Task<IEnumerable<Question>> GetQuestionsByTags(List<int> Tags);
         Task<Question> GetQuestionsById(string questionId);
         Task<bool> QuestionTagMapping(List<int> tags, string questionId);
+        Task<string> PostFeature(Feature feature, List<string> questions);
+        Task<string> AddUserToFeature(Guid featureId, string userId);
     }
 }

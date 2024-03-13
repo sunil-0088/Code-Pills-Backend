@@ -76,9 +76,21 @@ namespace Code_Pills.Services.Services
             return question;
         }
 
-        public Task<bool> QuestionTagMapping(List<int> tags, string questionId)
+        public async Task<bool> QuestionTagMapping(List<int> tags, string questionId)
         {
-           return _problemRepo.QuestionTagMapping(tags, questionId);
+           return await _problemRepo.QuestionTagMapping(tags, questionId);
+        }
+
+        public async Task<string> PostFeature(FeatureDTO feature)
+        {
+            feature.PillCount = feature.Questions.Count();
+            Feature newFeature = _mapper.Map<Feature>(feature);
+            return await _problemRepo.PostFeature(newFeature, feature.Questions);
+        }
+        public async Task<string> AddUserToFeature(Guid featureId)
+        {
+            string userId = _tokenService.GetUserId();
+            return await _problemRepo.AddUserToFeature(featureId, userId);
         }
     }
 }
