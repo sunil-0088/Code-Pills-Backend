@@ -1,4 +1,5 @@
 ﻿using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Code_Pills.DataAccess.Interface
         Task<string> SavePerformance(PerformanceMapping performance);
         Task<string> EditPerformance(PerformanceMapping performance);
         Task<bool> IsUserNameUnique(string userName);
+        Task<IEnumerable<GlobalRank>> GetGlobalRanks();
+        Task<PerformanceMapping> GetProfileStats(string userId);
     }
 }

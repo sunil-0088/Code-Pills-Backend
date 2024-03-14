@@ -8,7 +8,7 @@ namespace Code_Pills.Services.DTOs
 {
     public class PerformanceDTO
     {
-        public string UserID { get; set; }
+        public string? UserID { get; set; }
         public int TotalCredits { get; set; }
         public int CreditsLeft { get; set; }
         public float Rating { get; set; }

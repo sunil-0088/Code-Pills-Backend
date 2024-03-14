@@ -21,6 +21,8 @@ namespace Code_Pills.Services.Mapper
             CreateMap<Feature, FeatureDTO>();   
             CreateMap<PerformanceDTO, PerformanceMapping>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserID));
+            CreateMap<PerformanceMapping, PerformanceDTO>()
+                .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.UserId));
             CreateMap<ContestApplicantDTO, ContestUserMapping>()
                 .ForPath(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
             CreateMap<QuestionDTO, Question>();
