@@ -93,7 +93,19 @@ namespace Code_Pills.Controllers.Controllers
         [HttpGet("GetProfileStats")]
         public async Task<IActionResult> GetProfileStats()
         {
-            return Ok(await _profileService.GetProfileStats());
+            return Ok( new
+            {
+                stats = await _profileService.GetProfileStats()
+            });
+        }
+
+        [HttpGet("GetUserReport")]
+        public async Task<IActionResult> GetUserReport()
+        {
+            return Ok(new
+            {
+                report = await _profileService.GetUserReport()
+            });
         }
     }
 }

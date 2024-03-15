@@ -144,5 +144,64 @@ namespace Code_Pills.DataAccess.Repositories
             }
         }
 
+        public async Task<UserReport> GetUserReport(string userId)
+        {
+            try
+            {
+                UserReport report = new UserReport
+                {
+                    EasyCount = new List<int>(Enumerable.Repeat(0, 12)),
+                    MediumCount = new List<int>(Enumerable.Repeat(0, 12)),
+                    HardCount = new List<int>(Enumerable.Repeat(0, 12))
+                };
+
+                List<UserQuestionMapping> mappings = await _dbContext.UserQuestionMappings
+                    .Where(map => map.UserId == userId)
+                    .Include(map => map.Question)
+                    .ToListAsync();
+
+                foreach (var mapping in mappings)
+                {
+                    int month = mapping.Date.Month;
+
+                    string difficulty = mapping.Question.Difficulty;
+
+                    switch (difficulty)
+                    {
+                        case "easy":
+                            report.EasyCount[month - 1]++;
+                            break;
+                        case "medium":
+                            report.MediumCount[month - 1]++;
+                            break;
+                        case "hard":
+                            report.HardCount[month - 1]++;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (mapping.IsSolved)
+                    {
+                        int combinedKey = (mapping.Date.Month * 100) + mapping.Date.Day;
+                        if (report.DayCount.ContainsKey(combinedKey))
+                        {
+                            report.DayCount[combinedKey]++;
+                        }
+                        else
+                        {
+                            report.DayCount[combinedKey] = 1;
+                        }
+                    }
+                }
+
+                return report;
+
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
 }

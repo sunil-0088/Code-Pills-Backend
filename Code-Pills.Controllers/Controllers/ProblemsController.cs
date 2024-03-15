@@ -94,7 +94,10 @@ namespace Code_Pills.Controllers.Controllers
         [HttpPost("CreateFeatureList")]
         public async Task<IActionResult> PostFeature(FeatureDTO feature)
         {
-            return Ok(await _problemService.PostFeature(feature));
+            return Ok( new
+            {
+                id = await _problemService.PostFeature(feature)
+            });
         }
 
         [HttpPost("AddUserToFeature")]

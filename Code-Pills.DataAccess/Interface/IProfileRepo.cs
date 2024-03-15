@@ -17,5 +17,6 @@ namespace Code_Pills.DataAccess.Interface
         Task<bool> IsUserNameUnique(string userName);
         Task<IEnumerable<GlobalRank>> GetGlobalRanks();
         Task<PerformanceMapping> GetProfileStats(string userId);
+        Task<UserReport> GetUserReport(string userId);
     }
 }

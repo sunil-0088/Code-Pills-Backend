@@ -81,7 +81,7 @@ namespace Code_Pills.Services.Services
            return await _problemRepo.QuestionTagMapping(tags, questionId);
         }
 
-        public async Task<string> PostFeature(FeatureDTO feature)
+        public async Task<Guid> PostFeature(FeatureDTO feature)
         {
             feature.PillCount = feature.Questions.Count();
             Feature newFeature = _mapper.Map<Feature>(feature);

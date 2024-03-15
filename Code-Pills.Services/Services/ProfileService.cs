@@ -63,5 +63,11 @@ namespace Code_Pills.Services.Services
             PerformanceDTO profile = _mapper.Map <PerformanceDTO>(await _profileRepo.GetProfileStats(userId));
             return profile;
         }
+
+        public async Task<UserReport> GetUserReport()
+        {
+            string userId = _tokenService.GetUserId();
+            return await _profileRepo.GetUserReport(userId);            
+        }
     }
 }

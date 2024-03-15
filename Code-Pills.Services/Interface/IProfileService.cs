@@ -13,5 +13,6 @@ namespace Code_Pills.Services.Interface
         Task<bool> IsUserNameTaken(string userName);
         Task<IEnumerable<GlobalRank>> GetGlobalRanks();
         Task<PerformanceDTO> GetProfileStats();
+        Task<UserReport> GetUserReport();
     }
 }

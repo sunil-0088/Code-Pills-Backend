@@ -238,7 +238,7 @@ namespace Code_Pills.DataAccess.Repositories
             }
         }
 
-        public async Task<string> PostFeature(Feature feature, List<string> questions)
+        public async Task<Guid> PostFeature(Feature feature, List<string> questions)
         {
             try
             {
@@ -246,17 +246,17 @@ namespace Code_Pills.DataAccess.Repositories
                 await _dbContext.SaveChangesAsync();
                 if(await PostFeatureQuestions(feature.Id, questions))
                 {
-                    return "Feature Posted Successfully";
+                    return feature.Id;
                 }
                 else
                 {
-                    return "Error Posting Feature";
+                    return feature.Id;
                 }
 
             }
             catch (Exception ex)
             {
-                return "";
+                return feature.Id;
             }
         }
         public async Task<bool> PostFeatureQuestions(Guid featureId, List<string> questions)
