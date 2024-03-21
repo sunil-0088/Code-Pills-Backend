@@ -11,7 +11,6 @@ namespace Code_Pills.DataAccess.Interface
     public interface IContestRepo
     {
         Task<string> SaveContest(Contest contest, List<string> questions);
-        Task<bool> SaveContestQuestions(List<string> questions, Guid contestId);
         Task<string> SaveParticipation(Guid contestId, string userId);
         Task<string> SaveContestResult(Contest results);
         Task<IEnumerable<Contest>> GetUpcomingContests(string userId);

@@ -90,5 +90,20 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _problemService.GetQuestionsById(questionId));
         }
+
+        [HttpPost("CreateFeatureList")]
+        public async Task<IActionResult> PostFeature(FeatureDTO feature)
+        {
+            return Ok( new
+            {
+                id = await _problemService.PostFeature(feature)
+            });
+        }
+
+        [HttpPost("AddUserToFeature")]
+        public async Task<IActionResult> AddUserToFeature(Guid featureId)
+        {
+            return Ok(await _problemService.AddUserToFeature(featureId));
+        }
     }
 }

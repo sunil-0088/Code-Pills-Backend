@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
+using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,21 @@ namespace Code_Pills.Services.Services
         {
             return await _profileRepo.IsUserNameUnique(userName);
         }
+        public async Task<IEnumerable<GlobalRank>> GetGlobalRanks()
+        {
+            return await _profileRepo.GetGlobalRanks();
+        }
+        public async Task<PerformanceDTO> GetProfileStats()
+        {
+            string userId = _tokenService.GetUserId();
+            PerformanceDTO profile = _mapper.Map <PerformanceDTO>(await _profileRepo.GetProfileStats(userId));
+            return profile;
+        }
 
+        public async Task<UserReport> GetUserReport()
+        {
+            string userId = _tokenService.GetUserId();
+            return await _profileRepo.GetUserReport(userId);            
+        }
     }
 }

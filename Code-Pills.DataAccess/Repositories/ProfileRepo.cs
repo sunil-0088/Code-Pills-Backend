@@ -1,7 +1,9 @@
 ﻿using Code_Pills.DataAccess.Context;
 using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
+using Code_Pills.DataAccess.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -103,7 +105,103 @@ namespace Code_Pills.DataAccess.Repositories
             
         }
 
+        public async Task<IEnumerable<GlobalRank>> GetGlobalRanks()
+        {
+            try
+            {
+                List<GlobalRank> ranks = new List<GlobalRank>();
+                var query = from personalInfo in _dbContext.PersonalInformation
+                             join performace in _dbContext.PerformanceMappings
+                             on personalInfo.Id equals performace.UserId
+                             select new GlobalRank
+                             {
+                                 UserId = personalInfo.Id,
+                                 UserName = personalInfo.UserName,
+                                 Credits = performace.TotalCredits,
+                                 Rating = performace.Rating,
+                                 Accuracy = (performace.Solved / performace.Attempts) * 100,
+                             };
+                ranks.AddRange(query);
 
+                return ranks;
+            }
+            catch(Exception ex)
+            {
+                return new List<GlobalRank>();
+            }
+        }
+
+        public async Task<PerformanceMapping> GetProfileStats(string userId)
+        {
+            try
+            {
+                PerformanceMapping? profile = await _dbContext.PerformanceMappings.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                return new PerformanceMapping();
+            }
+        }
+
+        public async Task<UserReport> GetUserReport(string userId)
+        {
+            try
+            {
+                UserReport report = new UserReport
+                {
+                    EasyCount = new List<int>(Enumerable.Repeat(0, 12)),
+                    MediumCount = new List<int>(Enumerable.Repeat(0, 12)),
+                    HardCount = new List<int>(Enumerable.Repeat(0, 12))
+                };
+
+                List<UserQuestionMapping> mappings = await _dbContext.UserQuestionMappings
+                    .Where(map => map.UserId == userId)
+                    .Include(map => map.Question)
+                    .ToListAsync();
+
+                foreach (var mapping in mappings)
+                {
+                    int month = mapping.Date.Month;
+
+                    string difficulty = mapping.Question.Difficulty;
+
+                    switch (difficulty)
+                    {
+                        case "easy":
+                            report.EasyCount[month - 1]++;
+                            break;
+                        case "medium":
+                            report.MediumCount[month - 1]++;
+                            break;
+                        case "hard":
+                            report.HardCount[month - 1]++;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (mapping.IsSolved)
+                    {
+                        int combinedKey = (mapping.Date.Month * 100) + mapping.Date.Day;
+                        if (report.DayCount.ContainsKey(combinedKey))
+                        {
+                            report.DayCount[combinedKey]++;
+                        }
+                        else
+                        {
+                            report.DayCount[combinedKey] = 1;
+                        }
+                    }
+                }
+
+                return report;
+
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
 
     }
 }

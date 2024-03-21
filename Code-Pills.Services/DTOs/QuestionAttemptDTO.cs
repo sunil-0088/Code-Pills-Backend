@@ -12,5 +12,6 @@ namespace Code_Pills.Services.DTOs
         public string QuestionId { get; set; }
         public bool IsSolved { get; set; }
         public string Solution { get; set; }
+        public DateTime Date { get; set; }
     }
 }

@@ -21,5 +21,6 @@ namespace Code_Pills.DataAccess.EntityModels
         public virtual ICollection<UserQuestionMapping> UserQuestionMapping { get; set; }
         public virtual PerformanceMapping PerformanceMapping { get; set; }
         public virtual ICollection<ContestUserMapping> ContestUserMapping { get; set; }
+        public virtual ICollection<FeatureUserMapping> FeaturedUserMapping { get; set; }
     }
 }

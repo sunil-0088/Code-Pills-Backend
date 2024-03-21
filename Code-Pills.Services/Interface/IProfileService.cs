@@ -1,4 +1,5 @@
-﻿using Code_Pills.Services.DTOs;
+﻿using Code_Pills.DataAccess.Models;
+using Code_Pills.Services.DTOs;
 
 
 namespace Code_Pills.Services.Interface
@@ -10,5 +11,8 @@ namespace Code_Pills.Services.Interface
         Task<string> SavePerformance(PerformanceDTO performance);
         Task<string> EditPerformance(PerformanceDTO performance);
         Task<bool> IsUserNameTaken(string userName);
+        Task<IEnumerable<GlobalRank>> GetGlobalRanks();
+        Task<PerformanceDTO> GetProfileStats();
+        Task<UserReport> GetUserReport();
     }
 }

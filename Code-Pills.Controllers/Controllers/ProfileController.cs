@@ -84,5 +84,28 @@ namespace Code_Pills.Controllers.Controllers
             return Ok(isTaken);
         }
 
+        [HttpGet("GetGlobalRankings")]
+        public async Task<IActionResult> GetGlobalRankings()
+        {
+            return Ok(await _profileService.GetGlobalRanks());
+        }
+
+        [HttpGet("GetProfileStats")]
+        public async Task<IActionResult> GetProfileStats()
+        {
+            return Ok( new
+            {
+                stats = await _profileService.GetProfileStats()
+            });
+        }
+
+        [HttpGet("GetUserReport")]
+        public async Task<IActionResult> GetUserReport()
+        {
+            return Ok(new
+            {
+                report = await _profileService.GetUserReport()
+            });
+        }
     }
 }

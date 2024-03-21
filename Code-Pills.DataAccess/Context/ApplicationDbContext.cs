@@ -24,7 +24,9 @@ namespace Code_Pills.DataAccess.Context
         public DbSet<UserQuestionMapping> UserQuestionMappings { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<UserOtp> UserOtp { get; set; }
-
+        public DbSet<Feature> Featured { get; set; }
+        public DbSet<FeatureQuestionMapping> FeaturedQuestionMappings { get; set; }
+        public DbSet<FeatureUserMapping> FeaturedUserMappings { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -36,6 +38,9 @@ namespace Code_Pills.DataAccess.Context
             modelBuilder.ApplyConfiguration(new QuestionConfig());
             modelBuilder.ApplyConfiguration(new QuestionTagConfig());
             modelBuilder.ApplyConfiguration(new UserQuestionConfig());
+            modelBuilder.ApplyConfiguration(new FeatureConfig());
+            modelBuilder.ApplyConfiguration(new FeatureQuestionConfig());
+            modelBuilder.ApplyConfiguration(new FeatureUserConfig());
         }
     }
 }
