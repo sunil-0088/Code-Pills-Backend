@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
+using Sieve.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IContestService, ContestService>();
@@ -72,6 +73,7 @@ builder.Services.AddAuthentication(options => {
         new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     }
     );
+builder.Services.AddScoped<ISieveProcessor, SieveProcessor>();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtToken,JwtTokenService>();
 builder.Services.AddScoped<IEmailService, EmailService>();

@@ -5,6 +5,7 @@ using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,5 +97,12 @@ namespace Code_Pills.Services.Services
             string userId = _tokenService.GetUserId();
             return await _problemRepo.AddUserToFeature(featureId, userId);
         }
+
+        public async Task<IQueryable<Question>> GetQuestions(QuestionSieveDTO questionSieveDTO)
+        {
+            var questionSieve = _mapper.Map<QuestionSieve>(questionSieveDTO);
+            return await _problemRepo.GetQuestions(questionSieve);
+        }
+
     }
 }

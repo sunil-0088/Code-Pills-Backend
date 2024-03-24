@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Code_Pills.DataAccess.EntityModels;
+using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Code_Pills.Services.Mapper
 {
@@ -22,7 +19,7 @@ namespace Code_Pills.Services.Mapper
             CreateMap<PersonalInfo, ProfileDTO>();
 
             CreateMap<FeatureDTO, Feature>();
-            CreateMap<Feature, FeatureDTO>();   
+            CreateMap<Feature, FeatureDTO>();
 
             CreateMap<PerformanceDTO, PerformanceMapping>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserID));
@@ -35,6 +32,9 @@ namespace Code_Pills.Services.Mapper
 
             CreateMap<UserQuestionMapping, QuestionAttemptDTO>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
+            CreateMap <QuestionSieve, QuestionSieveDTO > ();
+            CreateMap <QuestionSieveDTO, QuestionSieve> ();
+
         }
     }
 }

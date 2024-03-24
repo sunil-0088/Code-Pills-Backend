@@ -105,5 +105,12 @@ namespace Code_Pills.Controllers.Controllers
         {
             return Ok(await _problemService.AddUserToFeature(featureId));
         }
+
+        [HttpGet("GetQuestions")]
+
+        public async Task<IActionResult> GetQuestions( [FromQuery]QuestionSieveDTO questionSieveDTO)
+        {
+            return Ok(await _problemService.GetQuestions(questionSieveDTO));
+        }
     }
 }

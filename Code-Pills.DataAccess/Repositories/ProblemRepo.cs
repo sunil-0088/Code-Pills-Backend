@@ -3,11 +3,7 @@ using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
 using Code_Pills.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Sieve.Services;
 
 namespace Code_Pills.DataAccess.Repositories
 {
@@ -15,10 +11,15 @@ namespace Code_Pills.DataAccess.Repositories
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly ISieveProcessor _sieveProcessor;
 
-        public ProblemRepo(ApplicationDbContext dbContext)
+        public ProblemRepo(ApplicationDbContext dbContext, ISieveProcessor sieveProcessor)
         {
             _dbContext = dbContext;
+            _sieveProcessor = sieveProcessor;
+
+
+
         }
         public async Task<string> SaveQuestion(Question problem)
         {
@@ -327,6 +328,25 @@ namespace Code_Pills.DataAccess.Repositories
             catch (Exception) {
 
                 return new List<int>();
+            }
+        }
+
+        public async Task<IQueryable<Question>> GetQuestions(QuestionSieve questionSieve)
+        {
+            try
+            {
+                var query = _dbContext.Questions.AsQueryable();
+                if (questionSieve.Tags?.Any() == true)
+                {
+                    query = query.Where(q => q.QuestionTagMapping.Any(qtm => questionSieve.Tags.Contains(qtm.TagId)));
+                }
+                var filteredResult = _sieveProcessor.Apply(questionSieve, query);
+
+                return filteredResult;
+            }
+            catch (Exception)
+            {
+               return Enumerable.Empty<Question>().AsQueryable();
             }
         }
     }
