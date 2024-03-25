@@ -24,7 +24,7 @@ namespace Code_Pills.Services.Interface
         Task<bool> QuestionTagMapping(List<int> tags, string questionId);
         Task<Guid> PostFeature(FeatureDTO feature);
         Task<string> AddUserToFeature(Guid featureId);
-        Task<IQueryable<Question>> GetQuestions(QuestionSieveDTO questionSieveDTO);
+        Task<dynamic> GetQuestions(QuestionSieveDTO questionSieveDTO);
 
     }
 }

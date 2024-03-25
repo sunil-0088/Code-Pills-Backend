@@ -98,10 +98,11 @@ namespace Code_Pills.Services.Services
             return await _problemRepo.AddUserToFeature(featureId, userId);
         }
 
-        public async Task<IQueryable<Question>> GetQuestions(QuestionSieveDTO questionSieveDTO)
+        public async Task<dynamic> GetQuestions(QuestionSieveDTO questionSieveDTO)
         {
             var questionSieve = _mapper.Map<QuestionSieve>(questionSieveDTO);
-            return await _problemRepo.GetQuestions(questionSieve);
+            string userId = _tokenService.GetUserId();
+            return await _problemRepo.GetQuestions(questionSieve,userId);
         }
 
     }

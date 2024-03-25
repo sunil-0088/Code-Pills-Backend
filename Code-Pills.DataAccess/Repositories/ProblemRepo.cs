@@ -331,18 +331,36 @@ namespace Code_Pills.DataAccess.Repositories
             }
         }
 
-        public async Task<IQueryable<Question>> GetQuestions(QuestionSieve questionSieve)
+        public async Task<dynamic> GetQuestions(QuestionSieve questionSieve,string userId)
         {
             try
             {
-                var query = _dbContext.Questions.AsQueryable();
-                if (questionSieve.Tags?.Any() == true)
-                {
-                    query = query.Where(q => q.QuestionTagMapping.Any(qtm => questionSieve.Tags.Contains(qtm.TagId)));
-                }
-                var filteredResult = _sieveProcessor.Apply(questionSieve, query);
+                try {
 
-                return filteredResult;
+                    var query = from question in _dbContext.Questions
+                                join mapping in _dbContext.UserQuestionMappings
+                                on new { QuestionId = question.Id, UserId = userId } equals new { mapping.QuestionId, mapping.UserId } into userMappings
+                                from userMapping in userMappings.DefaultIfEmpty()
+                                where question.QuestionTagMapping.Any(qtm => questionSieve.Tags.Contains(qtm.TagId)) &&
+                                      (userMapping == null || userMapping.IsSolved == true || userMapping.IsSolved == false || userMapping.IsSolved == null)
+                                select new QuestionRes
+                                {
+                                    Id = question.Id,
+                                    Title = question.Title,
+                                    Difficulty = question.Difficulty,
+                                    Status = userMapping != null ? userMapping.IsSolved.ToString() : null
+                                };
+
+                    var filteredResult = _sieveProcessor.Apply(questionSieve, query);
+
+                    return query;
+                } catch (Exception ex)
+                {
+                    return Enumerable.Empty<Question>().AsQueryable();
+
+                }
+
+
             }
             catch (Exception)
             {

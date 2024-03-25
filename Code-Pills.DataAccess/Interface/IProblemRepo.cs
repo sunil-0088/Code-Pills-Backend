@@ -26,7 +26,7 @@ namespace Code_Pills.DataAccess.Interface
         Task<UserQuestionMapping?> GetQuestionStatus(string userId, string questionId);
         Task<List<int>> GetQuestionTags(string questionId);
 
-        Task<IQueryable<Question>> GetQuestions(QuestionSieve questionSieve);
+        Task<dynamic> GetQuestions(QuestionSieve questionSieve,string userId);
 
     }
 }
