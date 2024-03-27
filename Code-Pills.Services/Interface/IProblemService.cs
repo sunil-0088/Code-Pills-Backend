@@ -1,12 +1,6 @@
 ﻿using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Code_Pills.Services.Interface
 {
@@ -24,7 +18,7 @@ namespace Code_Pills.Services.Interface
         Task<bool> QuestionTagMapping(List<int> tags, string questionId);
         Task<Guid> PostFeature(FeatureDTO feature);
         Task<string> AddUserToFeature(Guid featureId);
-        Task<dynamic> GetQuestions(QuestionSieveDTO questionSieveDTO);
+        Task<ProblemsResDTO> GetQuestions(QuestionSieveDTO questionSieveDTO);
 
     }
 }
