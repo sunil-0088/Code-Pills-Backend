@@ -87,7 +87,10 @@ namespace Code_Pills.Controllers.Controllers
         [HttpGet("GetGlobalRankings")]
         public async Task<IActionResult> GetGlobalRankings()
         {
-            return Ok(await _profileService.GetGlobalRanks());
+            return Ok( new
+            {
+                ranks = await _profileService.GetGlobalRanks()
+            });
         }
 
         [HttpGet("GetProfileStats")]
@@ -105,6 +108,15 @@ namespace Code_Pills.Controllers.Controllers
             return Ok(new
             {
                 report = await _profileService.GetUserReport()
+            });
+        }
+
+        [HttpGet("Rating")]
+        public async Task<IActionResult> GetRating()
+        {
+            return Ok(new
+            {
+                rating = await _profileService.CalculateRating(38, 100, 38, 62, 600, 0)
             });
         }
     }

@@ -69,5 +69,56 @@ namespace Code_Pills.Services.Services
             string userId = _tokenService.GetUserId();
             return await _profileRepo.GetUserReport(userId);            
         }
+
+        public async Task<double> CalculateRating(double accuracy, int attempts, int solvedQuestions, int incompleteQuestions, int creditsCount, int contestPerformance)
+        {
+            accuracy = 38;
+            attempts = 100;
+            solvedQuestions = 38;
+            incompleteQuestions = 62;
+            creditsCount = 600;
+            contestPerformance = 0;
+            double accuracyWeight = 0.4;
+            double attemptsWeight = 0.0;
+            double solvedQuestionsWeight = 0.0;
+            double incompleteQuestionsPenalty = 0.1; // Penalty for incomplete questions
+            double creditsCountWeight = 0.15;
+            double contestPerformanceWeight = 0.3;
+
+            // Normalize metrics (assuming all metrics are already on a relative scale)
+            double normalizedAccuracy = accuracy; // No need for normalization
+            double normalizedAttempts = Normalize(attempts); // Normalize attempts
+            double normalizedSolvedQuestions = Normalize(solvedQuestions); // Normalize solved questions
+            double normalizedIncompleteQuestions = Normalize(incompleteQuestions); // Normalize incomplete questions
+            double normalizedCreditsCount = Normalize(creditsCount); // Normalize credits count
+            double normalizedContestPerformance = Normalize(contestPerformance); // Normalize contest performance
+
+            // Calculate weighted sum
+            double weightedSum = (normalizedAccuracy * accuracyWeight) +
+                                 (normalizedAttempts * attemptsWeight) +
+                                 (normalizedSolvedQuestions * solvedQuestionsWeight) +
+                                 ((1 - normalizedIncompleteQuestions) * incompleteQuestionsPenalty) +
+                                 (normalizedCreditsCount * creditsCountWeight) +
+                                 (normalizedContestPerformance * contestPerformanceWeight);
+
+            // Map weighted sum to rating scale (1 to 5)
+            double minScore = 0; // Minimum possible score
+            double maxScore = 1; // Maximum possible score
+            double minRating = 1; // Minimum rating
+            double maxRating = 5; // Maximum rating
+
+            double rating = Math.Round(((weightedSum - minScore) / (maxScore - minScore)) * (maxRating - minRating)) + minRating;
+
+            // Ensure rating is within range
+            return Math.Max(minRating, Math.Min(maxRating, rating));
+        }
+
+        // Helper method to normalize a value (dummy implementation for demonstration)
+        private double Normalize(int value)
+        {
+            // Example: Normalizing value between 0 and 1 based on its rank
+            return value / (double.MaxValue - double.MinValue);
+        }
+
     }
 }

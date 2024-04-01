@@ -121,6 +121,10 @@ namespace Code_Pills.DataAccess.Repositories
                                  Rating = performace.Rating,
                                  Accuracy = (performace.Solved / performace.Attempts) * 100,
                              };
+                query = query.OrderByDescending(x => x.Credits)
+                 .ThenByDescending(x => x.Rating)
+                 .ThenByDescending(x => x.Accuracy);
+
                 ranks.AddRange(query);
 
                 return ranks;

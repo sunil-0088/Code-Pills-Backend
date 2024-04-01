@@ -14,5 +14,6 @@ namespace Code_Pills.Services.Interface
         Task<IEnumerable<GlobalRank>> GetGlobalRanks();
         Task<PerformanceDTO> GetProfileStats();
         Task<UserReport> GetUserReport();
+        Task<double> CalculateRating(double accuracy, int attempts, int solvedQuestions, int incompleteQuestions, int creditsCount, int contestPerformance);
     }
 }
