@@ -7,9 +7,8 @@ namespace Code_Pills.DataAccess.EntityModels
     {
 
         [Key]
-        [Required]
+        public required string Name { get; set; }
         public required int LanguageId { get; set; }
         public required string Value { get; set; }
-        public required string Name { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Code_Pills.DataAccess.Models;
 using Code_Pills.Services.DTOs;
 using Code_Pills.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +74,10 @@ namespace Code_Pills.Services.Services
         public async Task<QuestionDTO> GetQuestionsById(string questionId)
         {
             QuestionDTO question = _mapper.Map<QuestionDTO>(await _problemRepo.GetQuestionsById(questionId));
+
+            List<int> tags = await _problemRepo.GetQuestionTags(questionId);
+            question.Tags = tags;
+
             return question;
         }
 
@@ -92,5 +97,40 @@ namespace Code_Pills.Services.Services
             string userId = _tokenService.GetUserId();
             return await _problemRepo.AddUserToFeature(featureId, userId);
         }
+
+        public async Task<ProblemsResDTO> GetQuestions(QuestionSieveDTO questionSieveDTO)
+        {
+            var questionSieve = _mapper.Map<QuestionSieve>(questionSieveDTO);
+            string userId = _tokenService.GetUserId();
+            ProblemsRes problemsRes= await _problemRepo.GetQuestions(questionSieve);
+
+            List<QuestionResDTO> problems = new List<QuestionResDTO>();
+
+            foreach (var question in problemsRes.QuestionsRes)
+            {
+                UserQuestionMapping? userStatus=null;
+                if(userId!=null)
+                 userStatus = await _problemRepo
+                    .GetQuestionStatus(userId, question.Id);
+
+                problems.Add(new QuestionResDTO
+                {
+                    Id = question.Id,
+                    Title = question.Title,
+                    Status = userStatus != null ?
+                    userStatus.IsSolved ? "Solved" : "Attemped" : "Not Attemped",
+                    Difficulty = question.Difficulty
+
+                });
+            }
+
+            return new ProblemsResDTO
+            {
+                TotalProblems = problemsRes.TotalProblems,
+                QuestionRes = problems,
+
+            };
+        }
+
     }
 }

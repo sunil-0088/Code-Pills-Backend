@@ -3,11 +3,7 @@ using Code_Pills.DataAccess.EntityModels;
 using Code_Pills.DataAccess.Interface;
 using Code_Pills.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Sieve.Services;
 
 namespace Code_Pills.DataAccess.Repositories
 {
@@ -15,10 +11,15 @@ namespace Code_Pills.DataAccess.Repositories
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly ISieveProcessor _sieveProcessor;
 
-        public ProblemRepo(ApplicationDbContext dbContext)
+        public ProblemRepo(ApplicationDbContext dbContext, ISieveProcessor sieveProcessor)
         {
             _dbContext = dbContext;
+            _sieveProcessor = sieveProcessor;
+
+
+
         }
         public async Task<string> SaveQuestion(Question problem)
         {
@@ -290,9 +291,75 @@ namespace Code_Pills.DataAccess.Repositories
                 });
                 return "User Added Successfully";
             }
-            catch(Exception ex)
+            catch
             {
                 return "";
+            }
+        }
+
+        public async Task<UserQuestionMapping?> GetQuestionStatus(string userId, string questionId)
+        {
+            try
+            {
+                UserQuestionMapping? userQuestionMapping = await _dbContext
+                    .UserQuestionMappings
+                    .Where(map => map.QuestionId == questionId && map.UserId == userId)
+                    .FirstOrDefaultAsync();
+
+                return userQuestionMapping;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<int>> GetQuestionTags(string questionId)
+        {
+            try
+            {
+                List<int> tags = await _dbContext.QuestionTagMappings
+                    .Where(map => map.QuestionId == questionId)
+                    .Select(map => map.TagId)
+                    .ToListAsync();
+
+                return tags;
+
+            }
+            catch (Exception) {
+
+                return new List<int>();
+            }
+        }
+
+        public async Task<ProblemsRes> GetQuestions(QuestionSieve questionSieve)
+        {
+            try
+            {
+                var query = _dbContext.Questions.AsQueryable();
+                if (questionSieve.Tags?.Any() == true)
+                {
+                    query = query.Where(q => q.QuestionTagMapping
+                    .Any(qtm => questionSieve.Tags.Contains(qtm.TagId)));
+                }
+                var filteredResult = _sieveProcessor
+                    .Apply(questionSieve, query,applySorting:false, applyPagination: false);
+                int totalCount = filteredResult.Count();
+                Console.WriteLine(totalCount);
+                filteredResult = _sieveProcessor.Apply(questionSieve, filteredResult,applyFiltering:false);
+                return new ProblemsRes
+                {
+                 TotalProblems=totalCount,  
+                 QuestionsRes=filteredResult
+                };
+            }
+            catch (Exception)
+            {
+                return  new ProblemsRes
+                {
+                    TotalProblems = 0,
+                    QuestionsRes = Enumerable.Empty<Question>().AsQueryable()
+                };
             }
         }
     }

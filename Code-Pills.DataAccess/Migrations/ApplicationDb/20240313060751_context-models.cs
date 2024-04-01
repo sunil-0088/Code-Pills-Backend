@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 {
     /// <inheritdoc />
-    public partial class DbModels : Migration
+    public partial class contextmodels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,14 +40,13 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 name: "Languages",
                 columns: table => new
                 {
-                    LanguageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Languages", x => x.LanguageId);
+                    table.PrimaryKey("PK_Languages", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(

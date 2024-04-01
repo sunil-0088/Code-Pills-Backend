@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240312104956_DbModels")]
-    partial class DbModels
+    [Migration("20240324210210_addFilter")]
+    partial class addFilter
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,23 +138,85 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.ToTable("ContestUserMappings");
                 });
 
-            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Language", b =>
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Feature", b =>
                 {
-                    b.Property<int>("LanguageId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LanguageId"));
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PillCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Featured");
+                });
+
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.FeatureQuestionMapping", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FeatureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeatureId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("FeaturedQuestionMappings");
+                });
+
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.FeatureUserMapping", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FeatureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeatureId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FeaturedUserMappings");
+                });
+
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Language", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LanguageId");
+                    b.HasKey("Name");
 
                     b.ToTable("Languages");
                 });
@@ -347,6 +409,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsSolved")
                         .HasColumnType("bit");
 
@@ -409,6 +474,44 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Navigation("PersonalInfo");
                 });
 
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.FeatureQuestionMapping", b =>
+                {
+                    b.HasOne("Code_Pills.DataAccess.EntityModels.Feature", "Feature")
+                        .WithMany("FeaturedQuestionMapping")
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Code_Pills.DataAccess.EntityModels.Question", "Question")
+                        .WithMany("FeaturedQuestionMapping")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Feature");
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.FeatureUserMapping", b =>
+                {
+                    b.HasOne("Code_Pills.DataAccess.EntityModels.Feature", "Feature")
+                        .WithMany("FeaturedUserMapping")
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Code_Pills.DataAccess.EntityModels.PersonalInfo", "PersonalInfo")
+                        .WithMany("FeaturedUserMapping")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Feature");
+
+                    b.Navigation("PersonalInfo");
+                });
+
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.PerformanceMapping", b =>
                 {
                     b.HasOne("Code_Pills.DataAccess.EntityModels.PersonalInfo", "PersonalInfo")
@@ -465,9 +568,18 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     b.Navigation("ContestUserMapping");
                 });
 
+            modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Feature", b =>
+                {
+                    b.Navigation("FeaturedQuestionMapping");
+
+                    b.Navigation("FeaturedUserMapping");
+                });
+
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.PersonalInfo", b =>
                 {
                     b.Navigation("ContestUserMapping");
+
+                    b.Navigation("FeaturedUserMapping");
 
                     b.Navigation("PerformanceMapping")
                         .IsRequired();
@@ -478,6 +590,8 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
             modelBuilder.Entity("Code_Pills.DataAccess.EntityModels.Question", b =>
                 {
                     b.Navigation("ContestQuestionMapping");
+
+                    b.Navigation("FeaturedQuestionMapping");
 
                     b.Navigation("QuestionTagMapping");
 

@@ -19,13 +19,14 @@ namespace Code_Pills.DataAccess.Repositories
         {
             this.dbContext = dbContext;
         }
-        public async Task<bool> AddPersonalInformation(string userId, string email)
+        public async Task<bool> AddPersonalInformation(string userId, string email, string username)
         {
             var dataRow = new PersonalInfo()
             {
                 Id = userId,
-                UserName = email,
+                UserName = username,
                 Email = email,
+                DOB=DateTime.Now
             };
             await dbContext.PersonalInformation.AddAsync(dataRow);
             await dbContext.SaveChangesAsync();

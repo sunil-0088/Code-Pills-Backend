@@ -23,5 +23,9 @@ namespace Code_Pills.DataAccess.Interface
         Task<bool> QuestionTagMapping(List<int> tags, string questionId);
         Task<Guid> PostFeature(Feature feature, List<string> questions);
         Task<string> AddUserToFeature(Guid featureId, string userId);
+        Task<UserQuestionMapping?> GetQuestionStatus(string userId, string questionId);
+        Task<List<int>> GetQuestionTags(string questionId);
+        Task<ProblemsRes> GetQuestions(QuestionSieve questionSieve);
+
     }
 }
