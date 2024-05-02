@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 {
     /// <inheritdoc />
-    public partial class contextmodels : Migration
+    public partial class InitialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,20 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Featured",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PillCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Featured", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +170,31 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "FeaturedUserMappings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FeatureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeaturedUserMappings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FeaturedUserMappings_Featured_FeatureId",
+                        column: x => x.FeatureId,
+                        principalTable: "Featured",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FeaturedUserMappings_PersonalInformation_UserId",
+                        column: x => x.UserId,
+                        principalTable: "PersonalInformation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PerformanceMappings",
                 columns: table => new
                 {
@@ -204,6 +243,31 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "FeaturedQuestionMappings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FeatureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeaturedQuestionMappings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FeaturedQuestionMappings_Featured_FeatureId",
+                        column: x => x.FeatureId,
+                        principalTable: "Featured",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FeaturedQuestionMappings_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserQuestionMappings",
                 columns: table => new
                 {
@@ -211,7 +275,8 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                     IsSolved = table.Column<bool>(type: "bit", nullable: false),
                     Solution = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -276,6 +341,26 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FeaturedQuestionMappings_FeatureId",
+                table: "FeaturedQuestionMappings",
+                column: "FeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeaturedQuestionMappings_QuestionId",
+                table: "FeaturedQuestionMappings",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeaturedUserMappings_FeatureId",
+                table: "FeaturedUserMappings",
+                column: "FeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeaturedUserMappings_UserId",
+                table: "FeaturedUserMappings",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PerformanceMappings_UserId",
                 table: "PerformanceMappings",
                 column: "UserId",
@@ -318,6 +403,12 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
                 name: "ContestUserMappings");
 
             migrationBuilder.DropTable(
+                name: "FeaturedQuestionMappings");
+
+            migrationBuilder.DropTable(
+                name: "FeaturedUserMappings");
+
+            migrationBuilder.DropTable(
                 name: "Languages");
 
             migrationBuilder.DropTable(
@@ -337,6 +428,9 @@ namespace Code_Pills.DataAccess.Migrations.ApplicationDb
 
             migrationBuilder.DropTable(
                 name: "Contests");
+
+            migrationBuilder.DropTable(
+                name: "Featured");
 
             migrationBuilder.DropTable(
                 name: "Tags");

@@ -1,5 +1,4 @@
 ﻿using Code_Pills.DataAccess.EntityModels;
-using Code_Pills.DataAccess.Migrations.ApplicationDb;
 using Code_Pills.DataAccess.Models;
 using System;
 using System.Collections.Generic;
